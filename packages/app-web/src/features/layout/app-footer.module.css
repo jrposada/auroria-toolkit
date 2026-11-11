@@ -1,0 +1,21 @@
+.footer {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5) var(--space-8);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.credits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.disclaimer {
+  max-width: 72ch;
+}

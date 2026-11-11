@@ -23,4 +23,20 @@ describe('Given the app routes', () => {
       /<a[^>]*href="\/stat-planner"[^>]*>Go to the stat planner<\/a>/
     );
   });
+
+  it('when opening /stat-planner then the header shows the product name and marks the current tool', async () => {
+    const { html } = await renderRoute('/stat-planner');
+
+    expect(html).toMatch(/<header[^>]*>.*Auroria Toolkit.*<\/header>/s);
+    expect(html).toMatch(/<nav[^>]*aria-label="Tools"/);
+    expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>Stat planner<\/a>/);
+    expect(html).not.toContain('Crafting');
+  });
+
+  it('when opening an unknown path then the header and footer still render', async () => {
+    const { html } = await renderRoute('/nope');
+
+    expect(html).toContain('<header');
+    expect(html).toContain('<footer');
+  });
 });
