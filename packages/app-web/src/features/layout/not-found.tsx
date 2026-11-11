@@ -8,7 +8,9 @@ const NotFound: FunctionComponent = () => {
   return (
     <>
       <h1>{t('not_found.title')}</h1>
-      <Link to="/stat-planner">{t('not_found.back')}</Link>
+      <p>
+        <Link to="/stat-planner">{t('not_found.back')}</Link>
+      </p>
     </>
   );
 };
