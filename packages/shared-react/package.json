@@ -27,11 +27,21 @@
     "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:format": "prettier . --check",
     "lint:types": "tsc --noEmit -p tsconfig.dev.json",
-    "lint": "run-p lint:*"
+    "lint": "run-p lint:*",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@jrposada/auroria-toolkit-shared": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "react": "catalog:"
+  },
+  "dependencies": {
+    "axios": "catalog:"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "eslint-plugin-react-refresh": "catalog:",
@@ -40,6 +50,7 @@
     "npm-run-all": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
   }
 }
