@@ -17,6 +17,7 @@ catalog:
   typescript-eslint: 8.59.2
   typescript: 6.0.3
   vitest: 3.2.4
+  zod: 3.25.76
 
 minimumReleaseAge: 4320
 
