@@ -15,12 +15,27 @@ import ReactDOM from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 
 import App from './app';
+import {
+  getLocalStorage,
+  readStoredValue,
+} from './core/hooks/use-local-storage/use-local-storage';
+import {
+  applyThemeChoice,
+  parseThemeChoice,
+  THEME_STORAGE_KEY,
+} from './features/layout/theme';
 import i18n from './i18n';
 
 const queryClient = new QueryClient({
   // One retry: the unreachable-API message should not wait for three backoffs.
   defaultOptions: { queries: { retry: 1 } },
 });
+
+// Applied before the first render so a stored choice never flashes the system theme.
+applyThemeChoice(
+  document.documentElement,
+  parseThemeChoice(readStoredValue(getLocalStorage(), THEME_STORAGE_KEY, null))
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
