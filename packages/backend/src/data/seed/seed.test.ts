@@ -3,7 +3,7 @@ import { weaponSchema } from '@jrposada/auroria-toolkit-shared/models/weapons/we
 import { describe, expect, it } from 'vitest';
 import { ZodError } from 'zod';
 
-import { parseSeed, parseSeedFile } from './seed.ts';
+import { parseSeed, parseSeedFile, toClassRow, toWeaponRow } from './seed.ts';
 
 const LONGSWORD_IDS = [
   'pioneer-longsword',
@@ -247,5 +247,18 @@ describe('seed files', () => {
     expect(byId('pirates-longsword').howToGet).toBe(
       'Drop: Pallatius the Severer (Lv 5, Lost Docks), 100%'
     );
+  });
+
+  it('builds a class row with every field', () => {
+    expect(toClassRow(WARRIOR)).toEqual(WARRIOR);
+  });
+
+  it('builds a weapon row with class as classId and every other field', () => {
+    const { class: classId, ...rest } = byId('city-guard-longsword');
+
+    expect(toWeaponRow(byId('city-guard-longsword'))).toEqual({
+      ...rest,
+      classId,
+    });
   });
 });
