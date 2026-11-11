@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "warrior",
+      "name": "Warrior",
+      "baseStats": {
+        "str": 29,
+        "agi": 16,
+        "con": 17,
+        "int": 10,
+        "tal": 11,
+        "end": 7
+      },
+      "pointsPerLevel": 3,
+      "maxLevel": 40,
+      "weaponTypes": ["Longsword", "Greatsword"]
+    }
+  ]
+}

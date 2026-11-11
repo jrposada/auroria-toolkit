@@ -1,0 +1,231 @@
+{
+  "id": "49eaf573-3b55-43a5-b971-b67e817cf695",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.classes": {
+      "name": "classes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "base_stats": {
+          "name": "base_stats",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "points_per_level": {
+          "name": "points_per_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "max_level": {
+          "name": "max_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weapon_types": {
+          "name": "weapon_types",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.weapons": {
+      "name": "weapons",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "class_id": {
+          "name": "class_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_level": {
+          "name": "item_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "talent_requirement": {
+          "name": "talent_requirement",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight": {
+          "name": "weight",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "physical_atk": {
+          "name": "physical_atk",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "magic_atk": {
+          "name": "magic_atk",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "damage_share": {
+          "name": "damage_share",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stagger_trigger": {
+          "name": "stagger_trigger",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "exhaust_trigger": {
+          "name": "exhaust_trigger",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lunastone": {
+          "name": "lunastone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "extra_stat": {
+          "name": "extra_stat",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tempering": {
+          "name": "tempering",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "how_to_get": {
+          "name": "how_to_get",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sources": {
+          "name": "sources",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "weapons_class_id_type_idx": {
+          "name": "weapons_class_id_type_idx",
+          "columns": [
+            {
+              "expression": "class_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "weapons_class_id_classes_id_fk": {
+          "name": "weapons_class_id_classes_id_fk",
+          "tableFrom": "weapons",
+          "tableTo": "classes",
+          "columnsFrom": [
+            "class_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

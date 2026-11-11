@@ -17,17 +17,33 @@
   },
   "scripts": {
     "build": "tsc",
+    "db:generate": "drizzle-kit generate",
+    "dev:db": "docker-compose --project-name auroria-toolkit up -d --wait database",
     "dev:server": "TSX_TSCONFIG_PATH=tsconfig.dev.json tsx watch src/index.ts",
-    "dev": "pnpm dev:server",
+    "dev": "pnpm dev:db && pnpm dev:server",
     "start": "node dist/index.js",
     "lint:eslint": "eslint .",
     "lint:format": "prettier . --check",
     "lint:types": "tsc --noEmit -p tsconfig.dev.json",
-    "lint": "run-p lint:*"
+    "lint": "run-p lint:*",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jrposada/auroria-toolkit-shared": "workspace:*",
+    "cors": "2.8.6",
+    "dotenv": "catalog:",
+    "drizzle-orm": "0.45.4",
+    "express": "4.22.1",
+    "pg": "8.23.1",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
     "@types/node": "catalog:",
+    "@types/pg": "8.23.1",
+    "drizzle-kit": "0.31.11",
     "eslint": "catalog:",
     "eslint-plugin-simple-import-sort": "catalog:",
     "globals": "catalog:",
@@ -35,6 +51,7 @@
     "prettier": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
   }
 }
