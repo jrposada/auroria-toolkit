@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 
+import { createServer } from './api/server.ts';
 import { createDatabase } from './data/database.ts';
 import { runMigrations } from './data/migrate.ts';
 import { parseSeed, seedDatabase } from './data/seed/seed.ts';
@@ -8,6 +9,7 @@ import Logger from './infrastructure/logger.ts';
 
 dotenv.config();
 
+let api: Lifecycle | undefined;
 let database: Lifecycle | undefined;
 
 async function main() {
@@ -19,6 +21,9 @@ async function main() {
 
   await runMigrations();
   await seedDatabase(seed);
+
+  api = createServer();
+  await api.start();
 }
 
 let isShuttingDown = false;
@@ -28,6 +33,7 @@ async function shutdown() {
   isShuttingDown = true;
 
   try {
+    await api?.stop();
     await database?.stop();
     process.exit(0);
   } catch (error) {
