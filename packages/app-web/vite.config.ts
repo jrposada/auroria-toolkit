@@ -1,3 +1,4 @@
+import tanstackRouter from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -14,7 +15,13 @@ export default defineConfig(({ mode }) => {
     server: {
       host: env.VITE_HOST,
       port: env.VITE_PORT ? parseInt(env.VITE_PORT) : undefined,
+      // A silent move to another port would fail the API's CORS check.
+      strictPort: true,
     },
-    plugins: [react(), tsconfigPaths()],
+    plugins: [
+      tanstackRouter({ autoCodeSplitting: true }),
+      react(),
+      tsconfigPaths(),
+    ],
   });
 });

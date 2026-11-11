@@ -1,0 +1,19 @@
+/* Left-aligned on purpose: no auto margins. */
+.wrap {
+  max-width: var(--content-width);
+  margin: 0;
+  padding: 0 var(--space-5);
+}
+
+.main {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  padding-block: var(--space-6) var(--space-12);
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 var(--space-4);
+  }
+}

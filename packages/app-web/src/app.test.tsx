@@ -1,10 +1,26 @@
-import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import App from './app';
+import { renderRoute } from './test/render-route';
 
-describe('Given <App/>', () => {
-  it('then it renders', () => {
-    expect(renderToStaticMarkup(<App />)).toContain('Auroria Toolkit');
+describe('Given the app routes', () => {
+  it('when opening / then it redirects to /stat-planner', async () => {
+    const { pathname } = await renderRoute('/');
+
+    expect(pathname).toBe('/stat-planner');
+  });
+
+  it('when opening /stat-planner then it shows the translated heading inside main', async () => {
+    const { html } = await renderRoute('/stat-planner');
+
+    expect(html).toMatch(/<main[^>]*>.*<h1[^>]*>Stat planner<\/h1>/s);
+  });
+
+  it('when opening an unknown path then it shows the not-found page with a way back', async () => {
+    const { html } = await renderRoute('/nope');
+
+    expect(html).toContain('Page not found');
+    expect(html).toMatch(
+      /<a[^>]*href="\/stat-planner"[^>]*>Go to the stat planner<\/a>/
+    );
   });
 });
