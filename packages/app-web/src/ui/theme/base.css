@@ -22,6 +22,8 @@ h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
+  /* The face defaults to old-style figures, where 40 reads as "4o" and 1 as "I". */
+  font-variant-numeric: lining-nums;
   letter-spacing: 0.02em;
   line-height: 1.15;
   text-wrap: balance;
