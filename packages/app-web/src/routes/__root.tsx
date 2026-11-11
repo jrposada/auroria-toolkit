@@ -9,9 +9,6 @@ export const Route = createRootRoute({
       <Outlet />
     </AppLayout>
   ),
-  notFoundComponent: () => (
-    <AppLayout>
-      <NotFound />
-    </AppLayout>
-  ),
+  // Rendered in place of the outlet, so it is already inside the layout.
+  notFoundComponent: NotFound,
 });

@@ -34,11 +34,11 @@ describe('Given the app routes', () => {
     expect(html).not.toContain('Crafting');
   });
 
-  it('when opening an unknown path then the header and footer still render', async () => {
+  it('when opening an unknown path then the header and footer render once', async () => {
     const { html } = await renderRoute('/nope');
 
-    expect(html).toContain('<header');
-    expect(html).toContain('<footer');
+    expect(html.match(/<header/g)).toHaveLength(1);
+    expect(html.match(/<footer/g)).toHaveLength(1);
   });
 
   it('when game data is still loading then /stat-planner shows the loading state', async () => {
