@@ -1,0 +1,45 @@
+{
+  "name": "@jrposada/auroria-toolkit-shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "author": {
+    "email": "jrposada.dev@gmail.com",
+    "name": "Javier Rodriguez Posada"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrposada/auroria-toolkit.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": "^10"
+  },
+  "exports": {
+    "./*": {
+      "types": "./dist/src/*.d.ts",
+      "default": "./dist/src/*.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch --preserveWatchOutput",
+    "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:format": "prettier . --check",
+    "lint:types": "tsc --noEmit",
+    "lint": "run-p lint:*",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "globals": "catalog:",
+    "npm-run-all": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:"
+  }
+}
