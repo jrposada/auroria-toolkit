@@ -1,0 +1,28 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.fixAll.ts": "always"
+  },
+  "editor.formatOnSave": true,
+  "files.insertFinalNewline": true,
+  "editor.rulers": [80],
+  "i18n-ally.localesPaths": [
+    "packages/shared/src/localization"
+  ],
+  "i18n-ally.enabledFrameworks": [
+    "react-i18next"
+  ],
+  "i18n-ally.keystyle": "nested",
+  "eslint.workingDirectories": [
+    { "pattern": "packages/*/" }
+  ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+}

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warrior Stat Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Plan: steel-grey field, verdigris accent (the Longsword's Wind element), brass for Talent milestones.
+   Layout: control bar on top, then summary (stats + next level-up), chart, milestone table, traits, reference. */
+:root {
+  --bg: #f3f4f2;
+  --surface: #ffffff;
+  --ink: #1d2422;
+  --muted: #5d6a66;
+  --line: #d9dedb;
+  --accent: #23735f;
+  --accent-soft: #e2f0ea;
+  --brass: #a86b12;
+  --brass-soft: #f7ecd8;
+  --con: #3f5f8a;
+  --warn: #9a3b2a;
+  --font-display: "Spectral SC", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131817; --surface: #1b2220; --ink: #e6ecea; --muted: #9aa8a3; --line: #2c3633;
+    --accent: #5cc0a2; --accent-soft: #1d3a31; --brass: #e0a548; --brass-soft: #3a2d17;
+    --con: #8fb0e0; --warn: #ef8a74; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131817; --surface: #1b2220; --ink: #e6ecea; --muted: #9aa8a3; --line: #2c3633;
+  --accent: #5cc0a2; --accent-soft: #1d3a31; --brass: #e0a548; --brass-soft: #3a2d17;
+  --con: #8fb0e0; --warn: #ef8a74; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 24px 20px 48px; display: grid; gap: 20px; }
+h1, h2 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: .02em; }
+h1 { font-size: 30px; }
+h2 { font-size: 20px; }
+.sub { color: var(--muted); margin: 4px 0 0; }
+.num, td, .mono { font-variant-numeric: tabular-nums; }
+.mono { font-family: var(--font-mono); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.cardhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.hint { color: var(--muted); font-size: 13px; }
+
+/* level control */
+.levelbar { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
+.lvlnum { font-family: var(--font-display); font-size: 44px; line-height: 1; min-width: 3.2ch; text-align: center; color: var(--accent); }
+.lvlnum small { display: block; font-family: var(--font-body); font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.sliderrow { display: flex; gap: 10px; align-items: center; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 6px 12px; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.step { font-size: 20px; width: 40px; height: 40px; padding: 0; }
+.ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); padding: 0 2px; }
+.jump { display: flex; gap: 6px; flex-wrap: wrap; }
+.jump button { padding: 3px 9px; font-size: 13px; }
+.jump button.on { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+
+/* weapons in the level card */
+.weaprow { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr) auto; gap: 14px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); align-items: start; }
+@media (max-width: 860px) { .weaprow { grid-template-columns: 1fr; } }
+.wgroup { padding: 10px 12px; border-radius: 8px; background: var(--bg); display: grid; gap: 8px; }
+.wgroup.ls { box-shadow: inset 4px 0 0 var(--accent); }
+.wgroup.gs { box-shadow: inset 4px 0 0 var(--brass); }
+.wghead { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-weight: 600; font-size: 14px; }
+.wsel { font-weight: 400; font-size: 12px; color: var(--muted); }
+.wtiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 6px; }
+.wtile .nm { font-size: 11px; line-height: 1.2; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.4em; }
+.wtile { position: relative; display: grid; justify-items: center; gap: 2px; padding: 6px 4px 5px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font: inherit; color: var(--ink); }
+.wtile:hover, .wtile:focus-visible { border-color: var(--rc); transform: translateY(-1px); box-shadow: 0 2px 8px color-mix(in srgb, var(--rc) 25%, transparent); }
+.wtile[aria-checked="true"] { border: 2px solid var(--rc); padding: 5px 3px 4px; background: color-mix(in srgb, var(--rc) 10%, var(--surface)); }
+.wtile .ico { width: 40px; height: 40px; border-radius: 6px; background: color-mix(in srgb, var(--rc) 18%, var(--bg)); box-shadow: inset 0 0 0 1.5px var(--rc); display: grid; place-items: center; }
+.wtile .ico svg { width: 32px; height: 32px; }
+.wtile .lv { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.wtile .req { position: absolute; top: 2px; right: 3px; font-size: 10px; font-weight: 600; color: var(--brass); font-family: var(--font-mono); }
+.wtile .req.short { color: var(--warn); }
+.target { display: grid; gap: 2px; padding: 10px 14px; border-radius: 8px; background: var(--brass-soft); min-width: 150px; align-self: stretch; align-content: start; }
+.target .tl { font-size: 12px; color: var(--brass); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+.target .tv { font-family: var(--font-display); font-size: 34px; line-height: 1.05; color: var(--brass); }
+.target .ts { font-size: 12px; color: var(--muted); max-width: 190px; }
+:root { --r-common: #8a8f8c; --r-uncommon: #3f9a4f; --r-rare: #3a73c9; --r-epic: #8a4fc4; --r-legendary: #d0802a; }
+
+/* weapon tooltip */
+.wtip { position: absolute; z-index: 20; width: 330px; max-width: calc(100vw - 24px); background: #14191b; color: #e8ecea; border: 1px solid var(--rc); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.35); padding: 12px 14px; font-size: 13px; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s; }
+.wtip.on { opacity: 1; transform: none; }
+.wtip h4 { margin: 0; font-family: var(--font-display); font-size: 17px; color: var(--rc); font-weight: 600; }
+.wtip .sub2 { color: #a9b3b0; font-size: 12px; margin-bottom: 8px; }
+.wtip .sec { border-top: 1px solid #2c3436; padding-top: 7px; margin-top: 7px; display: grid; gap: 3px; }
+.wtip .row { display: flex; justify-content: space-between; gap: 10px; }
+.wtip .row span:last-child { font-family: var(--font-mono); text-align: right; }
+.wtip .k { color: #a9b3b0; }
+.wtip .good { color: #7fd3a8; }
+.wtip .bad { color: #f19a86; }
+.wtip .luna { color: #b9a6ff; }
+.wtip .note { color: #e8c37a; font-size: 12px; }
+.wtip table.tt { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 11.5px; margin: 2px 0 3px; }
+.wtip table.tt th, .wtip table.tt td { border: 0; padding: 1px 3px; text-align: right; color: #e8ecea; white-space: nowrap; }
+.wtip table.tt th { color: #a9b3b0; font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 11px; }
+.wtip table.tt td:first-child { text-align: left; color: #a9b3b0; font-family: var(--font-body); }
+.wtip .shbar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: #2c3436; margin-top: 2px; }
+.wtip .shbar i { display: block; }
+
+/* settings */
+details.settings summary { cursor: pointer; font-weight: 600; }
+.setgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+.field { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.field input, .field select { font: inherit; font-size: 14px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; width: 100%; }
+.setgroup { margin-top: 14px; }
+.setgroup h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+
+/* summary */
+.summary { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+@media (max-width: 760px) { .summary { grid-template-columns: 1fr; } .levelbar { grid-template-columns: auto 1fr; } .levelbar .stepR { display: none; } }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+td.total { font-weight: 600; font-size: 16px; }
+.delta.up { color: var(--accent); }
+.delta.zero { color: var(--muted); }
+.bar { height: 6px; border-radius: 3px; background: var(--line); position: relative; min-width: 80px; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--accent); }
+.rowstr .bar i { background: var(--accent); }
+.rowcon .bar i { background: var(--con); }
+.rowtal .bar i { background: var(--brass); }
+.rowfix .bar i { background: var(--muted); opacity: .5; }
+
+.next { display: grid; gap: 12px; align-content: start; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; gap: 6px; align-items: baseline; padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 15px; }
+.chip.con { background: color-mix(in srgb, var(--con) 16%, transparent); color: var(--con); }
+.chip.tal { background: var(--brass-soft); color: var(--brass); }
+.chip.none { background: var(--bg); color: var(--muted); font-weight: 500; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-size: 14px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-family: var(--font-mono); }
+.banner { border-left: 3px solid var(--brass); background: var(--brass-soft); padding: 8px 12px; border-radius: 6px; font-size: 14px; }
+.banner.warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+
+/* chart */
+.chartbox { overflow-x: auto; }
+svg text { font-family: var(--font-body); }
+
+/* milestone table */
+.tablebox { overflow-x: auto; }
+tr.sel td { background: var(--accent-soft); }
+tr.cur td:first-child::after { content: " (now)"; color: var(--muted); font-weight: 400; }
+tr.sel td:first-child { font-weight: 600; }
+td .tag { font-size: 11px; color: var(--brass); font-weight: 600; margin-left: 4px; }
+
+/* traits */
+.traitctl { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.traitctl input[type=number] { width: 80px; font: inherit; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+ol.phases { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+ol.phases li { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+ol.phases li .n { font-family: var(--font-display); font-size: 18px; color: var(--muted); }
+ol.phases li .t { font-weight: 600; }
+ol.phases li .d { font-size: 13px; color: var(--muted); }
+ol.phases li .c { text-align: right; font-family: var(--font-mono); font-size: 13px; }
+ol.phases li .pill { display: inline-block; font-family: var(--font-body); font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
+ol.phases li.done { border-left: 4px solid var(--accent); }
+ol.phases li.done .pill { background: var(--accent-soft); color: var(--accent); }
+ol.phases li.part { border-left: 4px solid var(--brass); }
+ol.phases li.part .pill { background: var(--brass-soft); color: var(--brass); }
+ol.phases li.todo .pill { background: var(--bg); color: var(--muted); }
+
+/* damage comparison */
+.dpsgrid { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 16px; align-items: start; }
+@media (max-width: 760px) { .dpsgrid { grid-template-columns: 1fr 1fr; } .dpsout { grid-column: 1 / -1; } }
+.weap { display: grid; gap: 8px; padding: 12px; border-radius: 8px; border: 1px solid var(--line); }
+.weap h3, .minih { margin: 0; font-size: 14px; font-weight: 600; }
+.weap.ls { border-top: 4px solid var(--accent); }
+.weap.gs { border-top: 4px solid var(--brass); }
+.dpsout { display: grid; gap: 10px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tile { display: grid; gap: 2px; padding: 10px 12px; border-radius: 8px; background: var(--bg); }
+.tile.ls { box-shadow: inset 4px 0 0 var(--accent); }
+.tile.gs { box-shadow: inset 4px 0 0 var(--brass); }
+.tile .tl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.tile .tv { font-family: var(--font-display); font-size: 30px; line-height: 1.1; }
+.tile.ls .tv { color: var(--accent); }
+.tile.gs .tv { color: var(--brass); }
+.tile .ts { font-size: 12px; color: var(--muted); }
+.verdict { margin: 0; font-weight: 600; font-size: 16px; }
+#exampleChip[hidden] { display: none; }
+#swords tr.pick { cursor: pointer; }
+#swords tr.pick:hover td { background: var(--accent-soft); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+a { color: var(--accent); }
+footer { color: var(--muted); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Warrior Stat Planner</h1>
+  <p class="sub">ArcheAge Chronicles Early Access · plans from the Warrior's level-1 base stats · 3 stat points per level · Longsword main, Greatsword swap</p>
+</header>
+
+<section class="card" aria-label="Level">
+  <div class="levelbar">
+    <div class="lvlnum num"><small>Level</small><span id="lvlOut">1</span></div>
+    <div>
+      <div class="sliderrow">
+        <button class="step" id="minus" aria-label="Level down">−</button>
+        <input type="range" id="level" min="1" max="40" step="1" value="1" aria-label="Character level">
+        <button class="step stepR" id="plus" aria-label="Level up">+</button>
+      </div>
+      <div class="ticks" aria-hidden="true"><span>1</span><span>10</span><span>20</span><span>30</span><span>40</span></div>
+    </div>
+    <div class="jump" id="jump" aria-label="Jump to level"></div>
+  </div>
+  <div class="weaprow">
+    <div class="wgroup ls">
+      <div class="wghead"><span>Longsword</span><span class="wsel" id="lsMeta"></span></div>
+      <div class="wtiles" id="lsTiles" role="radiogroup" aria-label="Longsword"></div>
+      <input type="hidden" id="lsSel">
+    </div>
+    <div class="wgroup gs">
+      <div class="wghead"><span>Greatsword</span><span class="wsel" id="gsMeta"></span></div>
+      <div class="wtiles" id="gsTiles" role="radiogroup" aria-label="Greatsword"></div>
+      <input type="hidden" id="gsSel">
+    </div>
+    <div class="target">
+      <span class="tl">Talent at level 40</span>
+      <span class="tv num" id="talTarget">23</span>
+      <span class="ts" id="talWhy"></span>
+    </div>
+  </div>
+  <p class="hint" id="weapNote" style="margin:10px 0 0">Hover or focus a weapon for its full stats; click to carry it. Both weapons are equipped at once, so the higher Talent requirement sets your target. Weapon data from RaidDex item pages (Physical ATK values from MetaForge where published).</p>
+</section>
+
+<section class="summary">
+  <div class="card">
+    <div class="cardhead">
+      <h2 id="statsTitle">Stats at level 1</h2>
+      <span class="hint" id="pointsOut">0 / 0 points spent</span>
+    </div>
+    <table aria-describedby="statsTitle">
+      <thead><tr><th>Stat</th><th>Base</th><th>Spent</th><th>Total</th><th style="width:36%"></th></tr></thead>
+      <tbody id="statRows"></tbody>
+    </table>
+  </div>
+  <div class="card next">
+    <div class="cardhead"><h2 id="nextTitle">Level 1 → 2</h2></div>
+    <div class="chips" id="nextChips"></div>
+    <p class="hint" id="nextNote"></p>
+    <dl class="kv">
+      <dt>Attack (same gear)</dt><dd id="dAtk">–</dd>
+      <dt>Crit chance</dt><dd id="dCrit">–</dd>
+      <dt>Crit damage rating</dt><dd id="dCd">–</dd>
+      <dt>Penetration</dt><dd id="dPen">–</dd>
+    </dl>
+    <p class="hint">Calibrated from your measurement at 54 Strength and 16 Agility: Attack 100, crit rating 684 (4.1%), crit damage 2642, pen 27. Strength adds 1.3 attack and 0.1 pen per point. Crit chance assumes rating ÷ (rating + 16,000). Gear changes all of these.</p>
+  </div>
+</section>
+
+<section class="card">
+  <div class="cardhead">
+    <h2>Stat totals, level 1 to 40</h2>
+    <span class="hint">Marker: selected level</span>
+  </div>
+  <div class="chartbox"><svg id="chart" viewBox="0 0 760 300" role="img" aria-label="Strength, Constitution and Talent totals from level 1 to 40" style="width:100%;min-width:520px;height:auto"></svg></div>
+</section>
+
+<section class="card" id="dpsCard">
+  <div class="cardhead">
+    <h2 id="dpsTitle">Longsword vs Greatsword damage at level 1</h2>
+    <span class="chip tal" id="exampleChip">Example numbers: run the test and replace them</span>
+  </div>
+  <p class="hint" style="margin:-4px 0 12px">The DPS lines use the weapons picked in the level card when their attack is known; otherwise the weapon you tested.</p>
+  <div class="dpsgrid">
+    <div class="weap ls">
+      <h3>Longsword</h3>
+      <label class="field" for="lsAtk">Tested weapon's Physical ATK<input id="lsAtk" type="number" min="0" value="41"></label>
+      <label class="field" for="lsDmg">Test: total damage dealt<input id="lsDmg" type="number" min="0" value="1200"></label>
+      <label class="field" for="lsSec">Test: seconds<input id="lsSec" type="number" min="0.1" step="0.1" value="10"></label>
+      <p class="hint" id="lsProj"></p>
+    </div>
+    <div class="weap gs">
+      <h3>Greatsword</h3>
+      <label class="field" for="gsAtk">Tested weapon's Physical ATK<input id="gsAtk" type="number" min="0" value="105"></label>
+      <label class="field" for="gsDmg">Test: total damage dealt<input id="gsDmg" type="number" min="0" value="1500"></label>
+      <label class="field" for="gsSec">Test: seconds<input id="gsSec" type="number" min="0.1" step="0.1" value="10"></label>
+      <p class="hint" id="gsProj"></p>
+    </div>
+    <div class="dpsout">
+      <div class="tiles">
+        <div class="tile ls"><span class="tl">Longsword DPS</span><span class="tv num" id="lsDps">–</span><span class="ts" id="lsAtkOut"></span></div>
+        <div class="tile gs"><span class="tl">Greatsword DPS</span><span class="tv num" id="gsDps">–</span><span class="ts" id="gsAtkOut"></span></div>
+      </div>
+      <p class="verdict" id="dpsVerdict"></p>
+      <dl class="kv">
+        <dt>+1 Strength, Longsword damage</dt><dd id="lsPer">–</dd>
+        <dt>+1 Strength, Greatsword damage</dt><dd id="gsPer">–</dd>
+      </dl>
+      <div class="setgrid" style="margin-top:0">
+        <label class="field" for="tAtk">Attack shown during the test (Longsword on)<input id="tAtk" type="number" min="0" value="100"></label>
+        <label class="field" for="tStr">Strength during the test<input id="tStr" type="number" min="0" value="54"></label>
+      </div>
+    </div>
+  </div>
+  <div class="chartbox" style="margin-top:14px"><svg id="dpsChart" viewBox="0 0 760 220" role="img" aria-label="Estimated Longsword and Greatsword DPS by level" style="width:100%;min-width:520px;height:auto"></svg></div>
+  <div class="grid2" style="margin-top:12px">
+    <div>
+      <h3 class="minih">How the estimate works</h3>
+      <p class="hint">Your sheet's Attack is your stats plus the equipped weapon's Physical ATK. The page keeps your measured DPS for each weapon and scales it with that weapon's Attack at each level: test Attack − Longsword ATK + the weapon's ATK, then 1.3 per Strength point above or below your test Strength. Strength is a flat bonus, so each point is a bigger share of the Longsword's lower Attack. Not modelled: crit triggers, Sharpwake, Resolve burst, Bleed, cleave on packs, stamina outside your test.</p>
+    </div>
+    <div>
+      <h3 class="minih">The 2-minute test</h3>
+      <ol class="plain">
+        <li>Swap weapons once and check that Attack changes by the ATK difference. If not, the model needs changing.</li>
+        <li>Pick one tough enemy and hit it with your normal single-target loop for 10 seconds per weapon, stamina included.</li>
+        <li>Add up the damage numbers (a screen recording helps). Do it 2–3 times and average.</li>
+        <li>Enter both totals, the seconds, and your Attack and Strength at the time. Re-test when you change weapon or tempering.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <details class="settings">
+    <summary>Plan settings</summary>
+    <div class="setgrid">
+      <label class="field" for="ratio">Strength : Constitution per level
+        <select id="ratio">
+          <option value="3">3 : 1 (more damage)</option>
+          <option value="2" selected>2 : 1 (recommended)</option>
+          <option value="1">1 : 1</option>
+          <option value="0.5">1 : 2 (more survival)</option>
+        </select>
+      </label>
+      <label class="field" for="talStart">Start adding Talent at level<input id="talStart" type="number" min="2" max="40" value="29"></label>
+    </div>
+    <p class="hint">Warrior base stats at level 1: STR 29, AGI 16, CON 17, INT 10, TAL 11, END 7. From the start level, Talent is taken out of the Strength share until it reaches the weapon requirement. If that would miss level 40, Constitution points are used too. <button id="reset" type="button">Reset to defaults</button></p>
+  </details>
+</section>
+
+<section class="card">
+  <div class="cardhead">
+    <h2>Longsword trait order</h2>
+    <div class="traitctl">
+      <label for="tp" class="hint">Trait points earned</label>
+      <input id="tp" type="number" min="0" max="100" value="0">
+      <span class="hint">Early Access regions hold 92</span>
+    </div>
+  </div>
+  <p class="hint">Trait points come from Raeven's Coilstones (boss-guarded), not levels. Costs assume a node with two parents needs only one of them, which matches RaidDex's 57-point Longsword build. Skip any node you already have.</p>
+  <ol class="phases" id="phases"></ol>
+</section>
+
+<section>
+  <div class="card">
+    <h2>Checks to run in game</h2>
+    <ul class="plain" style="margin-top:10px">
+      <li><strong>Sharpwake crit.</strong> At 3 Sharpwake stacks (from parries), read your crit chance. If it is 20% or more, crit triggers fire often without Agility.</li>
+      <li><strong>Talent preview.</strong> Preview +1 Talent and note the elemental (Wind) attack it adds. If it is large, start Talent earlier in the settings.</li>
+      <li><strong>Equip load.</strong> If your armor puts you in the medium or heavy tier, stamina costs rise. Talent raises the load limit.</li>
+      <li><strong>Survival.</strong> Dying in boss fights or PvP? Switch the ratio to 1 : 1 or 1 : 2 for a few levels.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Sources: <a href="https://wikily.gg/archeage-chronicles/weapons/longsword">Wikily Longsword tree</a> ·
+  <a href="https://raiddex.com/en/archeage-chronicles/builds">RaidDex builds</a> ·
+  <a href="https://archeagebuilds.com/classes/warrior/">ArcheAgeBuilds Warrior</a> ·
+  <a href="https://archeagebuilds.com/servers/">Server and patch notices</a>.
+  Stat effects measured on your character on Nov 7, 2026. Early Access balance may change.
+</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var BASE = { str: 29, agi: 16, con: 17, int: 10, tal: 11, end: 7 };
+  var KEYS = ["str", "agi", "con", "int", "tal", "end"];
+  var NAMES = { str: "Strength", agi: "Agility", con: "Constitution", int: "Intelligence", tal: "Talent", end: "Endurance" };
+  var ROWCLASS = { str: "rowstr", agi: "rowfix", con: "rowcon", int: "rowfix", tal: "rowtal", end: "rowfix" };
+  // Calibration from the measurement at 54 STR / 16 AGI (Nov 7, 2026)
+  var CAL = { str: 54, agi: 16, atk: 100, critR: 684, cdR: 2642, pen: 27 };
+  var DEFAULTS = { ratio: "2", talStart: 29, tp: 0, level: 1, lsSel: "Wrathful Tyrant's Horn", gsSel: "Scattered Mist",
+                   lsAtk: 41, lsDmg: 1200, lsSec: 10, gsAtk: 105, gsDmg: 1500, gsSec: 10, tAtk: 100, tStr: 54 };
+  var FIELDS = ["ratio","talStart","tp","lsSel","gsSel","lsAtk","lsDmg","lsSec","gsAtk","gsDmg","gsSec","tAtk","tStr"];
+  var TESTF = ["lsAtk","lsDmg","lsSec","gsAtk","gsDmg","gsSec","tAtk","tStr"];
+  var STORE = "aac-warrior-planner-v3";
+  var dpsEdited = false;
+
+  var PHASES = [
+    { t: "Parry → Sharpwake", n: "Parry, Counterattack, Longsword Proficiency, Swift Flurry, Sharpwake", d: "Parries grant Sharpwake: crit and damage up for 20 s, 3 stacks. Your main crit source.", c: 5 },
+    { t: "Charge → Pursuit", n: "Horizontal Slash, Charge, Pursuit, Pursuit - Root", d: "Gap closer with a 3 s root and Foresight. Keeps you on bosses that move.", c: 4 },
+    { t: "Lifeflame sustain", n: "Whirlwind Slash, Lifeflame, Heavy Kick", d: "Closing Slash heals based on damage dealt.", c: 3 },
+    { t: "Bloodstorm", n: "Annihilating Slash, Bloodstorm", d: "Area damage and Bleed, paid with HP instead of SP.", c: 5 },
+    { t: "Counter damage", n: "Twin Slash, Slaughter, Closing Slash Combo, Breakthrough, Counterattack Mastery", d: "Counters hit harder and build stun. Breakthrough spends Sharpwake for an extra hit.", c: 7 },
+    { t: "Blood core → Crimson Surge", n: "Bloodstorm Mastery I–II, Lightning Speed, Frenzy, Wind ATK, Hemorrhage, Bloodforge, Bloodthirst, Crimson Surge, Crimson Covenant", d: "Bloodforge makes your skills heal you. Completes the sustain loop.", c: 20 },
+    { t: "Parry burst → Mind's Eye", n: "Bladeburst, Physical Amplification, Perfect Foresight, Ultimate Slash I–II, Mind's Eye", d: "Crit-driven extra hits; Mind's Eye resets Bladeburst.", c: 14 },
+    { t: "Greatsword swap", n: "Vengeful Rush, Final Cleave and the burst nodes", d: "Emergency damage reduction under 50% HP and a finisher. Uses the rest of the 92.", c: 34 }
+  ];
+  // Warrior weapons from RaidDex item pages (Nov 2026). atk = Physical ATK from MetaForge where published.
+  // tp = tempering bonus % at +1/+5/+10/+15; st = stones per attempt at +5 (Faint), +10 (Vivid), +15 (Brilliant); g = gold at +1/+5/+10/+15
+  var LS_SHARE = { p: 70, m: 30, stag: 100, exh: 100 }, GS_SHARE = { p: 180, m: 20, stag: 125, exh: 110 };
+  var WEAPONS = [
+    { n: "Pioneer Longsword", t: "Longsword", r: "Common", lv: 1, w: 1.5, tp: [32.5, 162.5, 379.4, 650], st: [5, 5, 5], g: [100, 1000, 7000, 14500], get: "Quest reward: A Warm Welcome" },
+    { n: "Pirate's Longsword", t: "Longsword", r: "Uncommon", lv: 6, w: 1.5, tp: [17.8, 88.8, 207.2, 355], st: [8, 8, 8], g: [500, 3500, 29000, 61000], get: "Drop: Pallatius the Severer (Lv 5, Lost Docks), 100%" },
+    { n: "City Guard Longsword", t: "Longsword", r: "Uncommon", lv: 10, w: 1.58, atk: 41, matk: 18, luna: "Physical Crit Chance +53–61", tp: [14.3, 71.3, 166.4, 285], st: [8, 8, 8], g: [500, 3500, 29000, 61000], get: "Crafted (Smithing)" },
+    { n: "Inheritor's Cutlass", t: "Longsword", r: "Rare", lv: 15, w: 1.65, luna: "Physical PEN +2–9", tp: [13.3, 66.3, 154.7, 265], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Crafted (Smithing) · Duskglade Ranch completion" },
+    { n: "Slin's Shortblade", t: "Longsword", r: "Rare", lv: 15, w: 1.65, atk: 52, tp: [13.3, 66.3, 154.7, 265], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Source not listed" },
+    { n: "Martyr's Fang", t: "Longsword", r: "Rare", lv: 25, w: 1.5, tp: [17.8, 88.8, 207.2, 355], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Drop: Martyr's Fang (Lv 51, Sanctuary of Blessings), 16%" },
+    { n: "Tarnished Ancient Longsword", t: "Longsword", r: "Rare", lv: 30, req: 14, w: 1.73, luna: "Potion Potency +60–81", tp: [8.5, 42.5, 99.2, 170], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Crafted (Smithing) · Fell Keep completion" },
+    { n: "Twisted Fate Blade", t: "Longsword", r: "Epic", lv: 40, req: 30, w: 1.65, atk: 92, tp: [13.3, 66.3, 154.7, 265], st: [30, 30, 30], g: [4500, 28500, 238000, 497000], get: "Drop: Monstrous Tristan (Lv 51), 20% · Stardrift Hill completion", note: "XLGAMES: a \u201cTwisted Faith Sword\u201d gains too many stats when tempered; a fix is pending." },
+    { n: "Frozen Anguish", t: "Longsword", r: "Epic", lv: 45, req: 18, w: 1.8, luna: "Tidal ATK +13–60", tp: [7.8, 39, 91.1, 156], st: [30, 30, 30], g: [4500, 28500, 238000, 497000], get: "Crafted (Smithing)" },
+    { n: "Wrathful Tyrant's Horn", t: "Longsword", r: "Legendary", lv: 80, req: 23, w: 1.95, luna: "Fire ATK +10–67", tp: [7.5, 37.5, 87.6, 150], st: [40, 40, 40], g: [10000, 63000, 525000, 1093000], get: "Crafted (Smithing)" },
+    { n: "Royal Army Greatsword", t: "Greatsword", r: "Uncommon", lv: 10, w: 2.63, atk: 105, matk: 12, luna: "Physical Crit Damage +136–157", tp: [17.8, 88.8, 207.2, 355], st: [8, 8, 8], g: [500, 3500, 29000, 61000], get: "Crafted (Smithing)" },
+    { n: "Corrupt Meliot's Greatsword", t: "Greatsword", r: "Rare", lv: 14, w: 2.75, extra: "Damage to Normal Monsters 16.3", tp: [13.3, 66.3, 154.7, 265], get: "Drop: Meliot (Lv 17, Collapsed Southern Ruins), 80%" },
+    { n: "Covenant Greatsword", t: "Greatsword", r: "Rare", lv: 15, w: 2.75, luna: "Damage to Elite Monsters +6–17", tp: [13.3, 66.3, 154.7, 265], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Crafted (Smithing) · Arena of the Deceased completion" },
+    { n: "Fallen Margrave", t: "Greatsword", r: "Rare", lv: 30, req: 14, w: 2.88, luna: "Exhaust Trigger +5–12", tp: [8.5, 42.5, 99.2, 170], st: [12, 12, 12], g: [1500, 10000, 83000, 174000], get: "Crafted (Smithing) · Sandmist Gate completion" },
+    { n: "Scattered Mist", t: "Greatsword", r: "Epic", lv: 60, req: 23, w: 3.13, luna: "Fog ATK +13–94", tp: [7.5, 37.5, 87.6, 150], st: [30, 30, 30], g: [4500, 28500, 238000, 497000], get: "Crafted (Smithing)" }
+  ];
+  function weapon(name) { for (var i = 0; i < WEAPONS.length; i++) { if (WEAPONS[i].n === name) return WEAPONS[i]; } return null; }
+  function reqOf(w) { return w && w.req != null ? w.req : null; }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : DEFAULTS[id]; }
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(STORE) || "null");
+      if (s) { FIELDS.concat(["level"]).forEach(function (k) { if (s[k] !== undefined && $(k)) $(k).value = s[k]; }); dpsEdited = !!s.dpsEdited; }
+    } catch (e) { /* storage unavailable */ }
+  }
+  function save() {
+    try {
+      var s = { dpsEdited: dpsEdited }; FIELDS.concat(["level"]).forEach(function (k) { s[k] = $(k).value; });
+      localStorage.setItem(STORE, JSON.stringify(s));
+    } catch (e) { /* ignore */ }
+  }
+
+  function talentTarget() {
+    var ls = weapon($("lsSel").value), gs = weapon($("gsSel").value);
+    var lr = reqOf(ls), gr = reqOf(gs);
+    var tgt = Math.max(BASE.tal, lr || 0, gr || 0);
+    var by = null;
+    if (tgt > BASE.tal) by = (lr || 0) >= (gr || 0) ? ls : gs;
+    return { total: tgt, by: by, ls: ls, gs: gs, lr: lr, gr: gr };
+  }
+  function settings() {
+    return { r: parseFloat($("ratio").value) || 2, talStart: Math.max(2, Math.min(40, num("talStart"))), talTotal: talentTarget().total };
+  }
+  function spentOf(tot) { var s = {}; KEYS.forEach(function (k) { s[k] = tot[k] - BASE[k]; }); return s; }
+  function sum(o) { return KEYS.reduce(function (a, k) { return a + o[k]; }, 0); }
+  function avail(L) { return (L - 1) * 3; }
+
+  // Totals for every level, from the level-1 base stats
+  function project(S) {
+    var out = { 1: Object.assign({}, BASE) };
+    var tot = Object.assign({}, BASE), cumP = 0, prevStrT = 0, frac = S.r / (S.r + 1);
+    for (var lv = 2; lv <= 40; lv++) {
+      var pts = 3;
+      cumP += pts;
+      var strT = Math.round(cumP * frac);
+      var strShare = Math.max(0, Math.min(pts, strT - prevStrT));
+      prevStrT = strT;
+      var conShare = pts - strShare;
+      // Talent comes out of the Strength share from the start level; Constitution helps only if level 40 would be missed
+      var levelsLeft = 41 - lv;
+      var start = Math.min(S.talStart, 40);
+      var deficit = Math.max(0, S.talTotal - tot.tal);
+      var fromStr = 0, fromCon = 0;
+      if (deficit > 0) {
+        var strRate = Math.max(1, Math.round(3 * frac));
+        var late = deficit > strRate * levelsLeft;      // Strength share alone cannot close it by 40
+        if (lv >= start || deficit > 3 * (levelsLeft - 1)) {
+          fromStr = Math.min(deficit, strShare); deficit -= fromStr;
+          if (late || S.r <= 1 || deficit > 3 * (levelsLeft - 1)) { fromCon = Math.min(deficit, conShare); }
+        }
+      }
+      tot = Object.assign({}, tot);
+      tot.str += strShare - fromStr;
+      tot.con += conShare - fromCon;
+      tot.tal += fromStr + fromCon;
+      out[lv] = tot;
+    }
+    return out;
+  }
+
+  function derived(t) {
+    var dStr = t.str - CAL.str, dAgi = t.agi - CAL.agi, critR = CAL.critR + 29 * dAgi;
+    return { atk: CAL.atk + 1.3 * dStr + 0.3 * dAgi, crit: critR / (critR + 16000) * 100, cd: CAL.cdR + 36 * dAgi, pen: CAL.pen + 0.1 * dStr + 0.6 * dAgi };
+  }
+
+  function render() {
+    var S = settings();
+    var L = parseInt($("level").value, 10);
+    var T = project(S);
+    var t = T[L], spent = spentOf(t);
+
+    $("lvlOut").textContent = L;
+    $("statsTitle").textContent = "Stats at level " + L;
+    $("pointsOut").textContent = sum(spent) + " / " + avail(L) + " points spent";
+
+    var maxTot = 0; KEYS.forEach(function (k) { maxTot = Math.max(maxTot, T[40][k]); });
+    $("statRows").innerHTML = KEYS.map(function (k) {
+      var w = Math.max(2, Math.round(t[k] / maxTot * 100));
+      return "<tr class='" + ROWCLASS[k] + "'><td>" + NAMES[k] + "</td><td>" + BASE[k] + "</td><td>" + spent[k] +
+        "</td><td class='total'>" + t[k] + "</td><td><div class='bar'><i style='width:" + w + "%'></i></div></td></tr>";
+    }).join("");
+
+    if (L < 40) {
+      var n = T[L + 1], parts = [];
+      $("nextTitle").textContent = "Level " + L + " → " + (L + 1);
+      if (n.str - t.str) parts.push("<span class='chip'>+" + (n.str - t.str) + " Strength</span>");
+      if (n.con - t.con) parts.push("<span class='chip con'>+" + (n.con - t.con) + " Constitution</span>");
+      if (n.tal - t.tal) parts.push("<span class='chip tal'>+" + (n.tal - t.tal) + " Talent</span>");
+      $("nextChips").innerHTML = parts.join("");
+      $("nextNote").textContent = n.tal > t.tal ? "Talent level-up: working toward " + S.talTotal + " for your weapons." : "Spend these at the level-up screen.";
+    } else {
+      $("nextTitle").textContent = "Level 40";
+      $("nextChips").innerHTML = "<span class='chip none'>Max level in this plan</span>";
+      $("nextNote").textContent = "All " + avail(40) + " points spent.";
+    }
+
+    var dv = derived(t);
+    $("dAtk").textContent = dv.atk.toFixed(0);
+    $("dCrit").textContent = dv.crit.toFixed(1) + "%";
+    $("dCd").textContent = Math.round(dv.cd);
+    $("dPen").textContent = dv.pen.toFixed(1);
+
+    $("jump").innerHTML = [1, 10, 20, 30, 40].map(function (v) {
+      return "<button type='button' data-l='" + v + "' class='" + (v === L ? "on" : "") + "'>Lv " + v + "</button>";
+    }).join("");
+
+    renderWeapons(S, T);
+    drawChart(T, L);
+    renderDps(T, L);
+    renderTraits();
+    save();
+  }
+
+  function drawChart(T, L) {
+    var H = 300, x0 = 48, x1 = 690, y0 = 20, y1 = 260;
+    var maxV = 0; for (var i = 1; i <= 40; i++) { maxV = Math.max(maxV, T[i].str, T[i].con, T[i].tal); }
+    maxV = Math.ceil(maxV / 20) * 20;
+    var X = function (l) { return x0 + (l - 1) / 39 * (x1 - x0); };
+    var Y = function (v) { return y1 - v / maxV * (y1 - y0); };
+    var ink = css("--muted"), line = css("--line"), s = "";
+    for (var g = 0; g <= maxV; g += 20) {
+      s += "<line x1='" + x0 + "' x2='" + x1 + "' y1='" + Y(g) + "' y2='" + Y(g) + "' stroke='" + line + "' stroke-width='1'/>";
+      s += "<text x='" + (x0 - 8) + "' y='" + (Y(g) + 4) + "' text-anchor='end' font-size='11' fill='" + ink + "'>" + g + "</text>";
+    }
+    [1, 10, 20, 30, 40].forEach(function (l) { s += "<text x='" + X(l) + "' y='" + (y1 + 18) + "' text-anchor='middle' font-size='11' fill='" + ink + "'>" + l + "</text>"; });
+    s += "<text x='" + ((x0 + x1) / 2) + "' y='" + (H - 4) + "' text-anchor='middle' font-size='11' fill='" + ink + "'>Character level</text>";
+    var series = [["str", css("--accent"), "STR"], ["con", css("--con"), "CON"], ["tal", css("--brass"), "TAL"]], ends = [];
+    series.forEach(function (sr) {
+      var d = ""; for (var l = 1; l <= 40; l++) { d += (l === 1 ? "M" : "L") + X(l).toFixed(1) + " " + Y(T[l][sr[0]]).toFixed(1); }
+      s += "<path d='" + d + "' fill='none' stroke='" + sr[1] + "' stroke-width='2.5' stroke-linejoin='round'/>";
+      ends.push({ y: Y(T[40][sr[0]]), c: sr[1], t: sr[2] + " " + T[40][sr[0]] });
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var k = 1; k < ends.length; k++) { if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14; }
+    ends.forEach(function (e) { s += "<text x='" + (x1 + 8) + "' y='" + (e.y + 4) + "' font-size='12' font-weight='600' fill='" + e.c + "'>" + e.t + "</text>"; });
+    s += "<line x1='" + X(L) + "' x2='" + X(L) + "' y1='" + y0 + "' y2='" + y1 + "' stroke='" + css("--ink") + "' stroke-width='1.5'/>";
+    series.forEach(function (sr) {
+      s += "<circle cx='" + X(L) + "' cy='" + Y(T[L][sr[0]]) + "' r='4.5' fill='" + sr[1] + "' stroke='" + css("--surface") + "' stroke-width='1.5'><title>" + sr[2] + " " + T[L][sr[0]] + " at level " + L + "</title></circle>";
+    });
+    $("chart").innerHTML = s;
+  }
+
+  // ---- Longsword vs Greatsword ----
+  function dpsModel(T) {
+    var lsA = num("lsAtk"), gsA = num("gsAtk"), tAtk = num("tAtk"), tStr = num("tStr");
+    var statPart = tAtk - lsA;                     // Attack read with the tested Longsword equipped
+    var lw = weapon($("lsSel").value), gw = weapon($("gsSel").value);
+    var lsP = lw && lw.atk ? lw.atk : lsA, gsP = gw && gw.atk ? gw.atk : gsA;
+    $("lsProj").textContent = lw && lw.atk ? "Projected with " + lw.n + " (ATK " + lw.atk + ")." : "Projected with the tested Longsword (" + (lw ? lw.n : "selected") + " ATK not published).";
+    $("gsProj").textContent = gw && gw.atk ? "Projected with " + gw.n + " (ATK " + gw.atk + ")." : "Projected with the tested Greatsword (" + (gw ? gw.n : "selected") + " ATK not published).";
+    var lsD0 = num("lsDmg") / Math.max(0.1, num("lsSec")), gsD0 = num("gsDmg") / Math.max(0.1, num("gsSec"));
+    var lsA0 = statPart + lsA, gsA0 = statPart + gsA;
+    function at(L) {
+      var t = T[L], st = statPart + 1.3 * (t.str - tStr) + 0.3 * (t.agi - BASE.agi);
+      var la = st + lsP, ga = st + gsP;
+      return { lsAtk: la, gsAtk: ga, ls: Math.max(0, lsD0 * la / lsA0), gs: Math.max(0, gsD0 * ga / gsA0) };
+    }
+    return { at: at, ok: statPart > 0 && lsA0 > 0 && gsA0 > 0 };
+  }
+
+  function renderDps(T, L) {
+    var M = dpsModel(T);
+    $("dpsTitle").textContent = "Longsword vs Greatsword damage at level " + L;
+    $("exampleChip").hidden = dpsEdited;
+    if (!M.ok) { $("dpsVerdict").textContent = "Test Attack must be higher than the Longsword's ATK. Check the test numbers."; $("dpsChart").innerHTML = ""; return; }
+    var r = M.at(L);
+    $("lsDps").textContent = r.ls.toFixed(0);
+    $("gsDps").textContent = r.gs.toFixed(0);
+    $("lsAtkOut").textContent = "Attack " + r.lsAtk.toFixed(0);
+    $("gsAtkOut").textContent = "Attack " + r.gsAtk.toFixed(0);
+    var diff = r.ls > 0 ? (r.gs / r.ls - 1) * 100 : 0;
+    $("dpsVerdict").textContent = Math.abs(diff) < 2 ? "About even on a single target" :
+      (diff > 0 ? "Greatsword ahead by " + diff.toFixed(0) + "% on a single target" : "Longsword ahead by " + (-diff).toFixed(0) + "% on a single target");
+    $("lsPer").textContent = r.lsAtk > 0 ? "+" + (130 / r.lsAtk).toFixed(2) + "%" : "–";
+    $("gsPer").textContent = r.gsAtk > 0 ? "+" + (130 / r.gsAtk).toFixed(2) + "%" : "–";
+    drawDpsChart(M, L);
+  }
+
+  function drawDpsChart(M, L) {
+    var x0 = 48, x1 = 680, y0 = 16, y1 = 180, pts = [], maxV = 0;
+    for (var l = 1; l <= 40; l++) { var r = M.at(l); pts.push(r); maxV = Math.max(maxV, r.ls, r.gs); }
+    var step = maxV > 400 ? 100 : (maxV > 150 ? 50 : 25);
+    maxV = Math.ceil(maxV / step) * step || step;
+    var X = function (l) { return x0 + (l - 1) / 39 * (x1 - x0); };
+    var Y = function (v) { return y1 - v / maxV * (y1 - y0); };
+    var ink = css("--muted"), line = css("--line"), s = "";
+    for (var g = 0; g <= maxV; g += step) {
+      s += "<line x1='" + x0 + "' x2='" + x1 + "' y1='" + Y(g) + "' y2='" + Y(g) + "' stroke='" + line + "'/>";
+      s += "<text x='" + (x0 - 8) + "' y='" + (Y(g) + 4) + "' text-anchor='end' font-size='11' fill='" + ink + "'>" + g + "</text>";
+    }
+    [1, 10, 20, 30, 40].forEach(function (l) { s += "<text x='" + X(l) + "' y='" + (y1 + 18) + "' text-anchor='middle' font-size='11' fill='" + ink + "'>" + l + "</text>"; });
+    s += "<text x='" + x0 + "' y='" + (y0 - 4) + "' font-size='11' fill='" + ink + "'>Damage per second (single target)</text>";
+    var ser = [["ls", css("--accent"), "Longsword"], ["gs", css("--brass"), "Greatsword"]], ends = [];
+    ser.forEach(function (sr) {
+      var d = ""; pts.forEach(function (p, i) { d += (i ? "L" : "M") + X(i + 1).toFixed(1) + " " + Y(p[sr[0]]).toFixed(1); });
+      s += "<path d='" + d + "' fill='none' stroke='" + sr[1] + "' stroke-width='2.5'/>";
+      ends.push({ y: Y(pts[39][sr[0]]), c: sr[1], t: sr[2] + " " + pts[39][sr[0]].toFixed(0) });
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    if (ends[1].y - ends[0].y < 14) ends[1].y = ends[0].y + 14;
+    ends.forEach(function (e) { s += "<text x='" + (x1 + 8) + "' y='" + (e.y + 4) + "' font-size='12' font-weight='600' fill='" + e.c + "'>" + e.t + "</text>"; });
+    s += "<line x1='" + X(L) + "' x2='" + X(L) + "' y1='" + y0 + "' y2='" + y1 + "' stroke='" + css("--ink") + "' stroke-width='1.5'/>";
+    ser.forEach(function (sr) {
+      var v = pts[L - 1][sr[0]];
+      s += "<circle cx='" + X(L) + "' cy='" + Y(v) + "' r='4.5' fill='" + sr[1] + "' stroke='" + css("--surface") + "' stroke-width='1.5'><title>" + sr[2] + " " + v.toFixed(0) + " DPS at level " + L + "</title></circle>";
+    });
+    $("dpsChart").innerHTML = s;
+  }
+
+  function renderTraits() {
+    var tp = Math.max(0, num("tp")), cum = 0;
+    $("phases").innerHTML = PHASES.map(function (p, i) {
+      var start = cum; cum += p.c;
+      var state = tp >= cum ? "done" : (tp > start ? "part" : "todo");
+      var label = state === "done" ? "Done" : (state === "part" ? (cum - tp) + " to go" : "Later");
+      return "<li class='" + state + "'><span class='n'>" + (i + 1) + "</span><div><div class='t'>" + p.t + "</div><div>" + p.n +
+        "</div><div class='d'>" + p.d + "</div></div><div class='c'>~" + p.c + " pts<br>total " + cum + "<br><span class='pill'>" + label + "</span></div></li>";
+    }).join("");
+  }
+
+  // weapon pickers
+  $("lsSel").value = DEFAULTS.lsSel; $("gsSel").value = DEFAULTS.gsSel;
+  var lastT = null, lastL = 1;
+  var RC = { Common: "--r-common", Uncommon: "--r-uncommon", Rare: "--r-rare", Epic: "--r-epic", Legendary: "--r-legendary" };
+  function icon(w) {
+    var gs = w.t === "Greatsword";
+    var blade = gs ? "M9 23 L21 5 L27 5 L27 11 L11 25 Z" : "M10 22 L24 6 L27 5 L26 8 L12 24 Z";
+    return "<svg viewBox='0 0 32 32' aria-hidden='true'><path d='" + blade + "' fill='var(--rc)' fill-opacity='.85'/>" +
+      "<path d='M6 20 L12 26' stroke='var(--ink)' stroke-width='2.4' stroke-linecap='round'/>" +
+      "<path d='M8 24 L4 28' stroke='var(--muted)' stroke-width='2.4' stroke-linecap='round'/></svg>";
+  }
+  function renderWeapons(S, T) {
+    lastT = T; lastL = parseInt($("level").value, 10);
+    var tt = talentTarget();
+    var talNow = T[lastL].tal;
+    [["Longsword", "lsTiles", "lsSel", "lsMeta", tt.ls], ["Greatsword", "gsTiles", "gsSel", "gsMeta", tt.gs]].forEach(function (g) {
+      var focusedName = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute("data-w");
+      $(g[1]).innerHTML = WEAPONS.filter(function (w) { return w.t === g[0]; }).map(function (w) {
+        var sel = w.n === $(g[2]).value;
+        var short = w.req != null && talNow < w.req;
+        return "<button type='button' class='wtile' role='radio' aria-checked='" + sel + "' data-w=\"" + w.n.replace(/"/g, "&quot;") + "\" data-sel='" + g[2] + "' style='--rc:var(" + RC[w.r] + ")' aria-label='" + w.n.replace(/'/g, "&#39;") + ", " + w.r + ", item level " + w.lv + (w.req != null ? ", requires " + w.req + " Talent" : "") + "'>" +
+          (w.req != null ? "<span class='req" + (short ? " short" : "") + "'>" + w.req + "</span>" : "") +
+          "<span class='ico'>" + icon(w) + "</span><span class='nm'>" + w.n + "</span><span class='lv'>iLv " + w.lv + "</span></button>";
+      }).join("");
+      if (focusedName) { var f = $(g[1]).querySelector("[data-w=\"" + focusedName.replace(/"/g, '\\"') + "\"]"); if (f) f.focus(); }
+      var w = g[4];
+      if (w) $(g[3]).textContent = w.n + (w.req != null ? " · needs " + w.req + " Talent" : " · no Talent requirement");
+    });
+    $("talTarget").textContent = tt.total;
+    var reach = 0; for (var l = 1; l <= 40; l++) { if (T[l].tal >= tt.total) { reach = l; break; } }
+    $("talWhy").textContent = tt.by ? "set by " + tt.by.n + " · reached at level " + reach : "base Talent (11) covers both weapons";
+  }
+
+  // tooltip
+  var tip = document.createElement("div");
+  tip.className = "wtip"; tip.setAttribute("role", "tooltip"); tip.id = "wtip";
+  document.body.appendChild(tip);
+  function fmtG(v) { return v == null ? "–" : v.toLocaleString("en-US"); }
+  function tipHtml(w) {
+    var sh = w.t === "Greatsword" ? GS_SHARE : LS_SHARE;
+    var talNow = lastT ? lastT[lastL].tal : BASE.tal, reach = 0;
+    if (lastT && w.req != null) { for (var l = 1; l <= 40; l++) { if (lastT[l].tal >= w.req) { reach = l; break; } } }
+    var h = "<h4>" + w.n + "</h4><div class='sub2'>" + w.r + " " + w.t + " · Warrior · Item level " + w.lv + "</div>";
+    h += "<div class='sec'>";
+    if (w.atk) h += "<div class='row'><span class='k'>Physical ATK</span><span>" + w.atk + "</span></div>" + (w.matk ? "<div class='row'><span class='k'>Magic ATK</span><span>" + w.matk + "</span></div>" : "");
+    h += "<div class='row'><span class='k'>Damage share</span><span>" + sh.p + "% Phys · " + sh.m + "% Magic</span></div>";
+    h += "<div class='shbar'><i style='width:" + (sh.p / (sh.p + sh.m) * 100) + "%;background:var(--rc)'></i><i style='width:" + (sh.m / (sh.p + sh.m) * 100) + "%;background:#6c7cff'></i></div>";
+    h += "<div class='row'><span class='k'>Stagger Trigger</span><span>" + sh.stag + "%</span></div>";
+    h += "<div class='row'><span class='k'>Exhaust Trigger</span><span>" + sh.exh + "%</span></div>";
+    if (w.extra) h += "<div class='row'><span class='k'>Bonus</span><span>" + w.extra + "</span></div>";
+    h += "<div class='row'><span class='k'>Weight</span><span>" + w.w + "</span></div></div>";
+    h += "<div class='sec'>";
+    if (w.req != null) {
+      h += "<div class='row'><span class='k'>Requires</span><span class='" + (talNow >= w.req ? "good" : "bad") + "'>" + w.req + " Talent</span></div>";
+      h += "<div class='row'><span class='k'>Your Talent at level " + lastL + "</span><span class='" + (talNow >= w.req ? "good" : "bad") + "'>" + talNow + "</span></div>";
+      h += "<div class='row'><span class='k'>Plan reaches it</span><span>" + (reach ? "level " + reach : "not planned: click to carry it") + "</span></div>";
+    } else {
+      h += "<div class='row'><span class='k'>Requires</span><span class='good'>no Talent listed</span></div>";
+    }
+    h += "</div>";
+    if (w.luna) h += "<div class='sec'><div class='row'><span class='k'>Lunastone</span><span class='luna'>" + w.luna + "</span></div></div>";
+    if (w.tp) {
+      var cols = ["+1", "+5", "+10", "+15"];
+      h += "<div class='sec'><div class='k'>Tempering</div><table class='tt'><thead><tr><th></th>" + cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr></thead><tbody>";
+      h += "<tr><td>Bonus</td>" + w.tp.map(function (v) { return "<td>+" + v + "%</td>"; }).join("") + "</tr>";
+      if (w.st) h += "<tr><td>Stones</td><td>1 F</td><td>" + w.st[0] + " F</td><td>" + w.st[1] + " V</td><td>" + w.st[2] + " B</td></tr>";
+      if (w.g) h += "<tr><td>Gold</td>" + w.g.map(function (v) { return "<td>" + (v >= 1000 ? (v / 1000).toLocaleString("en-US", { maximumFractionDigits: 1 }) + "k" : v) + "</td>"; }).join("") + "</tr>";
+      h += "</tbody></table><div class='k' style='font-size:11px'>Per attempt. F/V/B = Faint, Vivid, Brilliant Weapon Tempering Stones. Success: 100% at +1, 20% at +5 and +10, 10% at +15.</div></div>";
+    }
+    h += "<div class='sec'><div class='k'>" + w.get + "</div>" + (w.note ? "<div class='note'>" + w.note + "</div>" : "") + "</div>";
+    return h;
+  }
+  function showTip(el) {
+    var w = weapon(el.getAttribute("data-w")); if (!w) return;
+    tip.style.setProperty("--rc", "var(" + RC[w.r] + ")");
+    tip.innerHTML = tipHtml(w);
+    el.setAttribute("aria-describedby", "wtip");
+    var r = el.getBoundingClientRect(), tw = Math.min(330, window.innerWidth - 24);
+    var left = Math.max(12, Math.min(window.scrollX + r.left + r.width / 2 - tw / 2, window.scrollX + window.innerWidth - tw - 12));
+    tip.style.left = left + "px";
+    tip.style.top = (window.scrollY + r.bottom + 8) + "px";
+    tip.classList.add("on");
+    var tr = tip.getBoundingClientRect();
+    if (tr.bottom > window.innerHeight && r.top > tr.height + 16) tip.style.top = (window.scrollY + r.top - tr.height - 8) + "px";
+  }
+  function hideTip() { tip.classList.remove("on"); }
+  ["lsTiles", "gsTiles"].forEach(function (id) {
+    var box = $(id);
+    box.addEventListener("mouseover", function (e) { var t = e.target.closest(".wtile"); if (t) showTip(t); });
+    box.addEventListener("mouseleave", hideTip);
+    box.addEventListener("focusin", function (e) { var t = e.target.closest(".wtile"); if (t) showTip(t); });
+    box.addEventListener("focusout", hideTip);
+    box.addEventListener("click", function (e) {
+      var t = e.target.closest(".wtile"); if (!t) return;
+      $(t.getAttribute("data-sel")).value = t.getAttribute("data-w");
+      render();
+      var again = box.querySelector("[data-w=\"" + t.getAttribute("data-w").replace(/"/g, '\\"') + "\"]");
+      if (again) { again.focus(); showTip(again); }
+    });
+    box.addEventListener("keydown", function (e) {
+      if (["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"].indexOf(e.key) < 0) return;
+      var tiles = Array.prototype.slice.call(box.querySelectorAll(".wtile")), i = tiles.indexOf(document.activeElement);
+      if (i < 0) return;
+      e.preventDefault(); e.stopPropagation();
+      var n = tiles[(i + (e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : tiles.length - 1)) % tiles.length];
+      n.focus();
+    });
+  });
+  window.addEventListener("scroll", hideTip, { passive: true });
+
+  TESTF.forEach(function (k) { $(k).addEventListener("input", function () { dpsEdited = true; }); });
+
+  load();
+  $("level").addEventListener("input", render);
+  $("minus").addEventListener("click", function () { $("level").value = Math.max(1, +$("level").value - 1); render(); });
+  $("plus").addEventListener("click", function () { $("level").value = Math.min(40, +$("level").value + 1); render(); });
+  $("jump").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) { $("level").value = b.getAttribute("data-l"); render(); } });
+  FIELDS.forEach(function (k) { $(k).addEventListener("input", render); $(k).addEventListener("change", render); });
+  $("reset").addEventListener("click", function () { Object.keys(DEFAULTS).forEach(function (k) { if ($(k)) $(k).value = DEFAULTS[k]; }); dpsEdited = false; render(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.target && /input|select|textarea/i.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight" || e.key === "+") { $("plus").click(); }
+    if (e.key === "ArrowLeft" || e.key === "-") { $("minus").click(); }
+  });
+  try { localStorage.removeItem("aac-warrior-planner-v1"); localStorage.removeItem("aac-warrior-planner-v2"); } catch (e) {}
+  if (window.matchMedia) { try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render); } catch (e) {} }
+  new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  render();
+})();
+</script>
+</body>
+</html>

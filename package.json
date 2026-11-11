@@ -1,0 +1,30 @@
+{
+  "name": "@jrposada/auroria-toolkit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "author": {
+    "email": "jrposada.dev@gmail.com",
+    "name": "Javier Rodriguez Posada"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrposada/auroria-toolkit.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": "^10"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "scripts": {
+    "clean": "find . -type d -name dist -not -path '*/node_modules/*' -prune -exec rm -rf {} +",
+    "dev:backend": "pnpm --filter @jrposada/auroria-toolkit-backend dev",
+    "dev:web": "pnpm --filter @jrposada/auroria-toolkit-app-web dev",
+    "lint": "pnpm -r --if-present lint"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "20.5.3",
+    "husky": "9.1.7",
+    "lint-staged": "17.0.5"
+  }
+}
