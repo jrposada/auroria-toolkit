@@ -1,0 +1,19 @@
+{
+  "app.name": "Auroria Toolkit",
+  "nav.label": "Tools",
+  "nav.stat_planner": "Stat planner",
+  "theme.label": "Theme",
+  "theme.system": "System",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.switch": "Theme: {{current}}. Switch to {{next}}.",
+  "footer.credits": "Game data and research from",
+  "footer.disclaimer": "Auroria Toolkit is an unofficial fan project. It is not affiliated with, endorsed by or sponsored by XLGAMES. ArcheAge Chronicles and its assets belong to XLGAMES.",
+  "data_state.loading": "Loading game data",
+  "data_state.error": "Can't load game data. Check that the backend is running, then retry.",
+  "data_state.retry": "Retry",
+  "not_found.title": "Page not found",
+  "not_found.back": "Go to the stat planner",
+  "stat_planner.title": "Stat planner",
+  "stat_planner.placeholder": "Game data loaded: {{className}}, {{count}} weapons. The planner itself is not built yet."
+}
