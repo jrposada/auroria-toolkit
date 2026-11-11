@@ -26,11 +26,22 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/spectral-sc": "5.3.0",
+    "@jrposada/auroria-toolkit-shared-react": "workspace:*",
+    "@jrposada/auroria-toolkit-shared": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "1.169.2",
+    "i18next-browser-languagedetector": "8.2.1",
+    "i18next": "25.10.10",
     "react-dom": "19.3.0",
+    "react-i18next": "16.6.6",
     "react": "catalog:"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
+    "@tanstack/router-plugin": "1.167.35",
     "@types/node": "catalog:",
     "@types/react-dom": "~19.3.0",
     "@types/react": "catalog:",

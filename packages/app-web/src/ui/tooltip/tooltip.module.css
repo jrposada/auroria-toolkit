@@ -1,0 +1,23 @@
+/* Item-card skin: dark in both themes, with an accent-coloured top edge. */
+.panel {
+  position: fixed;
+  z-index: 20;
+  width: 330px;
+  max-width: calc(100vw - 24px);
+  padding: 12px 14px;
+  border: 1px solid var(--tip-line);
+  border-top: 3px solid var(--tooltip-accent, var(--tip-line));
+  border-radius: 8px;
+  background: var(--tip-bg);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+  color: var(--tip-ink);
+  font-size: var(--text-sm);
+  pointer-events: none;
+  animation: fade var(--fade) ease-out;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

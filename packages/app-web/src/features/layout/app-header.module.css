@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  gap: var(--space-6);
+  align-items: baseline;
+  padding-top: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.name {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.toggle {
+  margin-left: auto;
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+}

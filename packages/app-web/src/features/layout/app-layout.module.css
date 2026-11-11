@@ -1,0 +1,20 @@
+/* Left-aligned on purpose: no auto margins. */
+.wrap {
+  max-width: var(--content-width);
+  margin: 0;
+  padding: 0 var(--space-5);
+}
+
+.main {
+  display: grid;
+  /* minmax(0, …) lets wide content (charts, tables) scroll inside its panel instead of widening the page. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-block: var(--space-6) var(--space-12);
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 var(--space-4);
+  }
+}
