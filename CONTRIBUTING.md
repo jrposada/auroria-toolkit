@@ -6,6 +6,8 @@
 
 3. pnpm 10.
 
+4. Docker. The backend's PostgreSQL runs in a container.
+
 ## Getting started
 
 1. Clone repository through ssh `git@github.com:jrposada/auroria-toolkit.git`
@@ -19,6 +21,14 @@
 ```
 pnpm dev:backend
 pnpm dev:web
+```
+
+`pnpm dev:backend` starts PostgreSQL in Docker on port 4200 (compose project `auroria-toolkit`), applies pending migrations, mirrors `packages/backend/src/data/seed/*.json` into the database and serves the API on port 4100. The seed files are the source of truth: the tables are rewritten to match them on every start.
+
+After changing a table in `packages/backend/src/data/models/`, generate its migration and commit the new files in `packages/backend/drizzle/`:
+
+```
+pnpm --filter @jrposada/auroria-toolkit-backend db:generate
 ```
 
 ## Packages
