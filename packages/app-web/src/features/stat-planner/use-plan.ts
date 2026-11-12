@@ -1,10 +1,10 @@
-import { DpsModel, dpsModel } from '@shared/common/stat-planner/dps-model';
 import {
   projectPlan,
   talentReachedAt,
-} from '@shared/common/stat-planner/project-plan';
-import { StatBlock } from '@shared/common/stat-planner/stats';
-import { talentTarget } from '@shared/common/stat-planner/talent-target';
+  talentTarget,
+} from '@shared/common/build/allocate';
+import { dpsModel } from '@shared/common/build/dps';
+import { AttributeBlock } from '@shared/common/build/stats';
 import { Class } from '@shared/models/classes/class';
 import { Weapon } from '@shared/models/weapons/weapon';
 import { useMemo } from 'react';
@@ -20,6 +20,11 @@ import {
   WEAPON_SLOTS,
 } from './planner-form';
 
+export type PlannerDps = {
+  ok: boolean;
+  at(level: number): { lsAtk: number; gsAtk: number; ls: number; gs: number };
+};
+
 export type Plan = {
   values: PlannerValues;
   cls: Class;
@@ -29,9 +34,9 @@ export type Plan = {
   selected: Record<Slot, Weapon | null>;
   target: { total: number; setBy: Weapon | null; reachedAt: number | null };
   /** Index 0 is level 1. */
-  totals: StatBlock[];
-  current: StatBlock;
-  dps: DpsModel;
+  totals: AttributeBlock[];
+  current: AttributeBlock;
+  dps: PlannerDps;
 };
 
 export function computePlan(
@@ -62,11 +67,30 @@ export function computePlan(
   const target = talentTarget(cls.baseStats.tal, carried);
   const totals = projectPlan({
     baseStats: cls.baseStats,
+    allocation: cls.allocation,
     ratio: values.ratio,
     talentStartLevel: values.talentStartLevel,
     talentTotal: target.total,
     maxLevel: cls.maxLevel,
     pointsPerLevel: cls.pointsPerLevel,
+  });
+  const { test } = values;
+  const dps = dpsModel({
+    plan: totals,
+    base: cls.baseStats,
+    derivation: cls.derivation,
+    test: {
+      attack: test.attack,
+      attributes: { str: test.str },
+      main: { weaponAtk: test.lsAtk, damage: test.lsDmg, seconds: test.lsSec },
+      swap: { weaponAtk: test.gsAtk, damage: test.gsDmg, seconds: test.gsSec },
+    },
+    weaponAtk: {
+      main: selected.ls?.physicalAtk ?? null,
+      swap: selected.gs?.physicalAtk ?? null,
+    },
+    // The planner has no gear beyond the tested weapons.
+    gearAtkDelta: 0,
   });
 
   return {
@@ -82,15 +106,18 @@ export function computePlan(
     },
     totals,
     current: totals[values.level - 1]!,
-    dps: dpsModel({
-      plan: totals,
-      baseAgi: cls.baseStats.agi,
-      test: values.test,
-      selected: {
-        lsAtk: selected.ls?.physicalAtk ?? null,
-        gsAtk: selected.gs?.physicalAtk ?? null,
+    dps: {
+      ok: dps.ok,
+      at(level) {
+        const at = dps.at(level);
+        return {
+          lsAtk: at.mainAtk,
+          gsAtk: at.swapAtk,
+          ls: at.main,
+          gs: at.swap,
+        };
       },
-    }),
+    },
   };
 }
 
