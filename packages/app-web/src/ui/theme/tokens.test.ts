@@ -135,6 +135,21 @@ describe('Given the theme tokens', () => {
     expect(undeclared).toEqual([]);
   });
 
+  it('then the content column is 1200px', () => {
+    expect(declared(root, 'content-width')).toBe('1200px');
+  });
+
+  it('then index.html paints the browser chrome in --paper for both themes', () => {
+    const html = read(join(SRC, '../index.html'));
+    const meta = (scheme: string) =>
+      new RegExp(
+        `<meta\\s+name="theme-color"\\s+content="([^"]+)"\\s+media="\\(prefers-color-scheme: ${scheme}\\)"`
+      ).exec(html)?.[1];
+
+    expect(meta('light')).toBe(declared(root, 'paper'));
+    expect(meta('dark')).toBe(declared(themeDark, 'paper'));
+  });
+
   it('then no stylesheet uses a monospace face or all-caps', () => {
     const css = cssFiles.map(read).join('\n');
 

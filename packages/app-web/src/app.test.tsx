@@ -95,7 +95,9 @@ describe('Given the app routes', () => {
     const { html } = await renderRoute('/crafting', queryClient);
 
     expect(html).toMatch(/<main[^>]*>.*<h1[^>]*>Crafting<\/h1>/s);
-    expect(html).toContain('No recipes yet. Recipe data is on the way.');
+    expect(html.replace(/<[^>]+>/g, '').replaceAll('&#x27;', "'")).toContain(
+      "Recipe data isn't in yet. Once it is, pick a recipe to see the materials and gold it takes."
+    );
     expect(html).toMatch(
       /<a[^>]*href="\/stat-planner"[^>]*>Go to the stat planner<\/a>/
     );
@@ -115,7 +117,7 @@ describe('Given the app routes', () => {
 
     expect(html).toContain('aria-busy="true"');
     expect(html).toContain('<h1');
-    expect(html).not.toContain('No recipes yet');
+    expect(html).not.toContain('Once it is, pick a recipe');
   });
 
   it('when the recipes request failed then /crafting shows the retry message, not the empty state', async () => {
@@ -131,7 +133,7 @@ describe('Given the app routes', () => {
 
     expect(html).toContain('role="alert"');
     expect(html).toContain('>Retry<');
-    expect(html).not.toContain('No recipes yet');
+    expect(html).not.toContain('Once it is, pick a recipe');
   });
 
   it('when recipes exist then /crafting says how many and drops the empty state', async () => {
@@ -143,6 +145,6 @@ describe('Given the app routes', () => {
     expect(html).toContain(
       'Recipes loaded: 3. The calculator itself is not built yet.'
     );
-    expect(html).not.toContain('No recipes yet');
+    expect(html).not.toContain('Once it is, pick a recipe');
   });
 });

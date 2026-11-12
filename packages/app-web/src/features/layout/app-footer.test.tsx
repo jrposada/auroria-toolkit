@@ -20,6 +20,12 @@ describe('Given <AppFooter/>', () => {
     expect(html).toContain(`<a href="${url}" rel="noreferrer">${name}</a>`);
   });
 
+  it('then it credits the sources in one sentence', () => {
+    expect(html.replace(/<[^>]+>/g, '')).toContain(
+      'Data and research: RaidDex, MetaForge, Wikily, ArcheAgeBuilds.'
+    );
+  });
+
   it('then it names MetaForge without a link', () => {
     expect(html).toContain('MetaForge');
     expect(html).not.toMatch(/<a[^>]*>MetaForge/);
