@@ -163,7 +163,7 @@
   "stat_planner.checks.measured": "Stat effects measured on your character on Nov 7, 2026. Early Access balance may change.",
   "stat_planner.checks.notices": "Server and patch notices",
   "crafting.title": "Crafting",
-  "crafting.empty": "No recipes yet. Recipe data is on the way.",
+  "crafting.empty": "Recipe data isn't in yet. Once it is, pick a recipe to see the materials and gold it takes.",
   "crafting.back": "Go to the stat planner",
   "crafting.placeholder": "Recipes loaded: {{count}}. The calculator itself is not built yet."
 }
