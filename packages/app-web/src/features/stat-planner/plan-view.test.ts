@@ -91,7 +91,7 @@ describe('Given the plan view-models', () => {
   });
 
   it('then the calibration values are formatted for the note', () => {
-    expect(calibrationValues()).toEqual({
+    expect(calibrationValues(planFor())).toEqual({
       str: '54',
       agi: '16',
       attack: '100',

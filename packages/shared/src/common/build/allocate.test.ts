@@ -1,23 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { availablePoints } from './available-points.ts';
 import {
+  availablePoints,
   PlanRatio,
   projectPlan,
   ProjectPlanInput,
   talentReachedAt,
-} from './project-plan.ts';
-import { STAT_KEYS, StatBlock } from './stats.ts';
-import { talentTarget } from './talent-target.ts';
+  talentTarget,
+} from './allocate.ts';
+import { ATTRIBUTE_KEYS, AttributeBlock } from './stats.ts';
+import { MAGE, WARRIOR } from './test/classes.ts';
 
-const WARRIOR_BASE: StatBlock = {
-  str: 29,
-  agi: 16,
-  con: 17,
-  int: 10,
-  tal: 11,
-  end: 7,
-};
+const WARRIOR_BASE: AttributeBlock = WARRIOR.baseStats;
 
 const w = (id: string, talentRequirement: number | null) => ({
   id,
@@ -27,6 +21,7 @@ const w = (id: string, talentRequirement: number | null) => ({
 const plan = (over: Partial<ProjectPlanInput> = {}) =>
   projectPlan({
     baseStats: WARRIOR_BASE,
+    allocation: WARRIOR.allocation,
     ratio: 2,
     talentStartLevel: 29,
     talentTotal: 23,
@@ -35,7 +30,7 @@ const plan = (over: Partial<ProjectPlanInput> = {}) =>
     ...over,
   });
 
-const at = (p: StatBlock[], level: number) => {
+const at = (p: AttributeBlock[], level: number) => {
   const totals = p[level - 1]!;
   return [totals.str, totals.con, totals.tal];
 };
@@ -99,7 +94,7 @@ describe.each(combinations)(
 
     it('spends exactly (level − 1) × 3 points at every level', () => {
       p.forEach((totals, index) => {
-        const spent = STAT_KEYS.reduce(
+        const spent = ATTRIBUTE_KEYS.reduce(
           (sum, key) => sum + totals[key] - WARRIOR_BASE[key],
           0
         );
@@ -109,7 +104,7 @@ describe.each(combinations)(
 
     it('never drops a total below base', () => {
       for (const totals of p) {
-        for (const key of STAT_KEYS) {
+        for (const key of ATTRIBUTE_KEYS) {
           expect(totals[key]).toBeGreaterThanOrEqual(WARRIOR_BASE[key]);
         }
       }
@@ -182,5 +177,90 @@ describe('projectPlan', () => {
     expect(baseStats).toEqual(WARRIOR_BASE);
     expect(p[0]).not.toBe(baseStats);
     expect(p[0]).not.toBe(p[1]);
+  });
+});
+
+describe('allocation from the class', () => {
+  it("uses the seed's Warrior allocation", () => {
+    expect(WARRIOR.allocation).toEqual({ primary: 'str', secondary: 'con' });
+  });
+
+  it('projects a non-Warrior class onto its own attributes', () => {
+    const p = plan({ allocation: MAGE.allocation, talentTotal: 23 });
+    const last = p[39]!;
+
+    expect([last.int, last.end, last.tal]).toEqual([76, 46, 23]);
+    expect([last.str, last.con, last.agi]).toEqual([29, 17, 16]);
+    p.forEach((totals, index) => {
+      const spent = ATTRIBUTE_KEYS.reduce(
+        (sum, key) => sum + totals[key] - WARRIOR_BASE[key],
+        0
+      );
+      expect(spent).toBe(availablePoints(index + 1));
+    });
+  });
+});
+
+describe('availablePoints', () => {
+  it.each([
+    [1, 0],
+    [2, 3],
+    [30, 87],
+    [40, 117],
+  ])('level %i has %i points', (level, points) => {
+    expect(availablePoints(level)).toBe(points);
+  });
+
+  it('uses the given points per level', () => {
+    expect(availablePoints(11, 2)).toBe(20);
+  });
+});
+
+describe('talentTarget', () => {
+  it('is the base Talent when no weapon has a requirement', () => {
+    expect(
+      talentTarget(11, [
+        w('pioneer-longsword', null),
+        w('royal-army-greatsword', null),
+      ])
+    ).toEqual({ total: 11, setBy: null });
+  });
+
+  it('is the highest requirement, set by that weapon', () => {
+    expect(
+      talentTarget(11, [w('twisted-fate-blade', 30), w('scattered-mist', 23)])
+    ).toEqual({ total: 30, setBy: 'twisted-fate-blade' });
+  });
+
+  it('is set by the second weapon when only it has a requirement', () => {
+    expect(
+      talentTarget(11, [w('pioneer-longsword', null), w('fallen-margrave', 14)])
+    ).toEqual({ total: 14, setBy: 'fallen-margrave' });
+  });
+
+  it('is set by the first weapon on a tie', () => {
+    expect(
+      talentTarget(11, [
+        w('wrathful-tyrants-horn', 23),
+        w('scattered-mist', 23),
+      ])
+    ).toEqual({ total: 23, setBy: 'wrathful-tyrants-horn' });
+  });
+
+  it('is the base Talent when every requirement is at or below it', () => {
+    expect(talentTarget(11, [w('a', 5), w('b', 11)])).toEqual({
+      total: 11,
+      setBy: null,
+    });
+  });
+
+  it('is the base Talent with no weapons', () => {
+    expect(talentTarget(11, [])).toEqual({ total: 11, setBy: null });
+  });
+
+  it('accepts any item with a Talent requirement', () => {
+    expect(
+      talentTarget(11, [{ id: 'some-helmet', talentRequirement: 18 }])
+    ).toEqual({ total: 18, setBy: 'some-helmet' });
   });
 });

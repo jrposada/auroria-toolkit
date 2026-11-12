@@ -1,18 +1,13 @@
-import { availablePoints } from '@shared/common/stat-planner/available-points';
-import {
-  CALIBRATION,
-  COEFFICIENTS,
-} from '@shared/common/stat-planner/calibration';
-import { derivedStats } from '@shared/common/stat-planner/derived-stats';
-import { DpsAtLevel } from '@shared/common/stat-planner/dps-model';
-import { STAT_KEYS, StatKey } from '@shared/common/stat-planner/stats';
+import { availablePoints } from '@shared/common/build/allocate';
+import { derivedStats } from '@shared/common/build/derive';
+import { ATTRIBUTE_KEYS, AttributeKey } from '@shared/common/build/stats';
 
 import { Slot } from './planner-form';
-import { Plan } from './use-plan';
+import { Plan, PlannerDps } from './use-plan';
 
 export type StatTone = 'strength' | 'constitution' | 'talent' | 'fixed';
 
-const TONES: Record<StatKey, StatTone> = {
+const TONES: Record<AttributeKey, StatTone> = {
   str: 'strength',
   agi: 'fixed',
   con: 'constitution',
@@ -22,7 +17,7 @@ const TONES: Record<StatKey, StatTone> = {
 };
 
 export type StatRow = {
-  key: StatKey;
+  key: AttributeKey;
   tone: StatTone;
   base: number;
   spent: number;
@@ -33,9 +28,9 @@ export type StatRow = {
 /** Bars are scaled to the largest total at the last level. */
 export function statRows(plan: Plan): StatRow[] {
   const last = plan.totals.at(-1) ?? plan.current;
-  const maxTotal = Math.max(...STAT_KEYS.map((key) => last[key]));
+  const maxTotal = Math.max(...ATTRIBUTE_KEYS.map((key) => last[key]));
 
-  return STAT_KEYS.map((key) => {
+  return ATTRIBUTE_KEYS.map((key) => {
     const base = plan.cls.baseStats[key];
     const total = plan.current[key];
 
@@ -51,7 +46,7 @@ export function statRows(plan: Plan): StatRow[] {
 }
 
 export function pointsSpent(plan: Plan): { spent: number; available: number } {
-  const spent = STAT_KEYS.reduce(
+  const spent = ATTRIBUTE_KEYS.reduce(
     (sum, key) => sum + plan.current[key] - plan.cls.baseStats[key],
     0
   );
@@ -102,7 +97,12 @@ export function derivedView(plan: Plan): {
   critDamageRating: string;
   penetration: string;
 } {
-  const derived = derivedStats(plan.current);
+  const derivation = plan.cls.derivation;
+  const derived = derivedStats(
+    plan.current,
+    derivation,
+    derivation.reference.gear
+  );
 
   return {
     attack: derived.attack.toFixed(0),
@@ -112,7 +112,9 @@ export function derivedView(plan: Plan): {
   };
 }
 
-export function calibrationValues(): Record<
+export function calibrationValues(
+  plan: Plan
+): Record<
   | 'str'
   | 'agi'
   | 'attack'
@@ -125,26 +127,31 @@ export function calibrationValues(): Record<
   | 'divisor',
   string
 > {
-  const atCalibration = derivedStats({
-    str: CALIBRATION.str,
-    agi: CALIBRATION.agi,
-    con: 0,
-    int: 0,
-    tal: 0,
-    end: 0,
-  });
+  const { reference, perPoint, critRatingDivisor } = plan.cls.derivation;
+  const atCalibration = derivedStats(
+    {
+      str: reference.attributes.str ?? 0,
+      agi: reference.attributes.agi ?? 0,
+      con: 0,
+      int: 0,
+      tal: 0,
+      end: 0,
+    },
+    plan.cls.derivation,
+    reference.gear
+  );
 
   return {
-    str: String(CALIBRATION.str),
-    agi: String(CALIBRATION.agi),
-    attack: String(CALIBRATION.attack),
-    critRating: String(CALIBRATION.critRating),
+    str: String(reference.attributes.str),
+    agi: String(reference.attributes.agi),
+    attack: String(reference.values.attack),
+    critRating: String(reference.values.critRating),
     critPct: atCalibration.critPct.toFixed(1),
-    critDamage: String(CALIBRATION.critDamageRating),
-    pen: String(CALIBRATION.penetration),
-    attackPerStr: String(COEFFICIENTS.attackPerStr),
-    penPerStr: String(COEFFICIENTS.penetrationPerStr),
-    divisor: COEFFICIENTS.critRatingDivisor.toLocaleString('en-US'),
+    critDamage: String(reference.values.critDamageRating),
+    pen: String(reference.values.penetration),
+    attackPerStr: String(perPoint.attack?.str),
+    penPerStr: String(perPoint.penetration?.str),
+    divisor: critRatingDivisor.toLocaleString('en-US'),
   };
 }
 
@@ -173,14 +180,12 @@ export type DpsView =
   | { ok: false }
   | { ok: true; verdict: Verdict; ls: DpsSide; gs: DpsSide };
 
-function dpsSide(dps: number, attack: number): DpsSide {
+function dpsSide(dps: number, attack: number, attackPerStr: number): DpsSide {
   return {
     dps: dps.toFixed(0),
     attack: attack.toFixed(0),
     perStrength:
-      attack > 0
-        ? `+${((COEFFICIENTS.attackPerStr * 100) / attack).toFixed(2)}%`
-        : '–',
+      attack > 0 ? `+${((attackPerStr * 100) / attack).toFixed(2)}%` : '–',
   };
 }
 
@@ -190,12 +195,13 @@ export function dpsView(plan: Plan): DpsView {
   }
 
   const at = plan.dps.at(plan.level);
+  const attackPerStr = plan.cls.derivation.perPoint.attack?.str ?? 0;
 
   return {
     ok: true,
     verdict: dpsVerdict(at.ls, at.gs),
-    ls: dpsSide(at.ls, at.lsAtk),
-    gs: dpsSide(at.gs, at.gsAtk),
+    ls: dpsSide(at.ls, at.lsAtk, attackPerStr),
+    gs: dpsSide(at.gs, at.gsAtk, attackPerStr),
   };
 }
 
@@ -226,7 +232,7 @@ export function dpsSeries(plan: Plan): {
   gs: number[];
   step: number;
 } {
-  const points: DpsAtLevel[] = plan.totals.map((_, index) =>
+  const points: ReturnType<PlannerDps['at']>[] = plan.totals.map((_, index) =>
     plan.dps.at(index + 1)
   );
   const ls = points.map((point) => point.ls);

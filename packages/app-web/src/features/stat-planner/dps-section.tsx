@@ -193,7 +193,7 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
           <h3>{t('stat_planner.dps.how_title')}</h3>
           <p>
             {t('stat_planner.dps.how_body', {
-              attackPerStr: calibrationValues().attackPerStr,
+              attackPerStr: calibrationValues(plan).attackPerStr,
             })}
           </p>
         </div>
