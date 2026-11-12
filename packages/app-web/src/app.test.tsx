@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import { describe, expect, it } from 'vitest';
 
+import { WARRIOR, WEAPONS } from './features/stat-planner/test/game-data';
 import { renderRoute } from './test/render-route';
 
 function navLinkTag(html: string, label: string): string {
@@ -53,21 +54,20 @@ describe('Given the app routes', () => {
 
     expect(html).toContain('aria-busy="true"');
     expect(html).toContain('<h1');
+    expect(html).toContain('aria-label="Character level"');
   });
 
-  it('when game data is cached then /stat-planner shows the placeholder sentence', async () => {
+  it('when game data is cached then /stat-planner shows the planner inside main', async () => {
     const queryClient = new QueryClient();
-    queryClient.setQueryData(['classes', { id: 'warrior' }], {
-      name: 'Warrior',
-    });
+    queryClient.setQueryData(['classes', { id: 'warrior' }], WARRIOR);
     queryClient.setQueryData(
       ['weapons', { class: 'warrior', type: undefined }],
-      new Array(15).fill({})
+      WEAPONS
     );
 
     const { html } = await renderRoute('/stat-planner', queryClient);
 
-    expect(html).toContain('Game data loaded: Warrior, 15 weapons.');
+    expect(html).toMatch(/<main[^>]*>.*Stats at level 1.*<\/main>/s);
   });
 
   it('when a game data request failed then /stat-planner shows the retry message', async () => {
@@ -85,7 +85,7 @@ describe('Given the app routes', () => {
 
     expect(html).toContain('role="alert"');
     expect(html).toContain('>Retry<');
-    expect(html).not.toContain('Game data loaded');
+    expect(html).not.toContain('Stats at level');
   });
 
   it('when opening /crafting with no recipes then it shows the empty state with a way back', async () => {

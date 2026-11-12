@@ -16,7 +16,6 @@
   "not_found.title": "Page not found",
   "not_found.back": "Go to the stat planner",
   "stat_planner.title": "Stat planner",
-  "stat_planner.placeholder": "Game data loaded: {{className}}, {{count}} weapons. The planner itself is not built yet.",
   "stat_planner.intro.game": "ArcheAge Chronicles Early Access",
   "stat_planner.intro.base": "Plans from the {{className}}'s level-1 base stats",
   "stat_planner.intro.points": "{{count}} stat points per level",

@@ -1,0 +1,51 @@
+.planner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+}
+
+.intro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  margin: calc(-1 * var(--space-2)) 0 0;
+  padding: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  list-style: none;
+}
+
+.weapons {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr) auto;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.weaponNotes {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 90ch;
+  margin-top: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .weapons {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
