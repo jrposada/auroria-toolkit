@@ -174,7 +174,7 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
               yStep={series.step}
               markerX={plan.level}
               height={220}
-              endLabelSpace={80}
+              endLabelSpace={112}
               caption={t('stat_planner.dps.chart_caption')}
               markerTitle={(line, value) =>
                 t('stat_planner.dps.marker_title', {
