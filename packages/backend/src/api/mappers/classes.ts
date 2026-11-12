@@ -10,6 +10,8 @@ function toApiClass(model: ClassRow): Class {
     pointsPerLevel: model.pointsPerLevel,
     maxLevel: model.maxLevel,
     weaponTypes: model.weaponTypes,
+    allocation: model.allocation,
+    derivation: model.derivation,
   };
 }
 

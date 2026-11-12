@@ -1,3 +1,4 @@
+import type { Class } from '@jrposada/auroria-toolkit-shared/models/classes/class';
 import { classSchema } from '@jrposada/auroria-toolkit-shared/models/classes/class';
 import { materialSchema } from '@jrposada/auroria-toolkit-shared/models/materials/material';
 import type { Recipe } from '@jrposada/auroria-toolkit-shared/models/recipes/recipe';
@@ -48,7 +49,28 @@ const WARRIOR = {
   pointsPerLevel: 3,
   maxLevel: 40,
   weaponTypes: ['Longsword', 'Greatsword'],
-};
+  allocation: { primary: 'str', secondary: 'con' },
+  derivation: {
+    provisional: true,
+    reference: {
+      attributes: { str: 54, agi: 16 },
+      gear: [{ stat: 'physicalAtk', value: 41 }],
+      values: {
+        attack: 100,
+        critRating: 684,
+        critDamageRating: 2642,
+        penetration: 27,
+      },
+    },
+    perPoint: {
+      attack: { str: 1.3, agi: 0.3 },
+      critRating: { agi: 29 },
+      critDamageRating: { agi: 36 },
+      penetration: { str: 0.1, agi: 0.6 },
+    },
+    critRatingDivisor: 16000,
+  },
+} satisfies Class;
 
 describe('parseSeedFile', () => {
   it('returns the items of a valid file', () => {
