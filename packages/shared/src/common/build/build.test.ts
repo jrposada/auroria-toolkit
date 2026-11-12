@@ -1,15 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
+import { projectPlan, talentReachedAt } from './allocate.ts';
 import {
   Build,
   BUILD_STORAGE_KEY,
   buildSchema,
+  computeBuild,
   decodeBuild,
   encodeBuild,
   newBuild,
 } from './build.ts';
-import { WARRIOR } from './test/classes.ts';
-import { HELM, SWORD } from './test/gear.ts';
+import { derivedStats } from './derive.ts';
+import { dpsModel } from './dps.ts';
+import { AttributeBlock } from './stats.ts';
+import { MAGE, WARRIOR } from './test/classes.ts';
+import { CATALOG, HELM, piece, SWORD } from './test/gear.ts';
 
 const toBase64Url = (bytes: Uint8Array) =>
   btoa(String.fromCharCode(...bytes))
@@ -108,5 +113,167 @@ describe('encodeBuild / decodeBuild', () => {
     expect(decodeBuild(text(JSON.stringify(slot)), ['warrior'])).toEqual({
       ok: false,
     });
+  });
+});
+
+const d = WARRIOR.derivation;
+const ls = piece('longsword');
+const gs = piece('greatsword');
+const levels = Array.from({ length: WARRIOR.maxLevel }, (_, i) => i + 1);
+
+const plus = (
+  block: AttributeBlock,
+  over: Partial<AttributeBlock>
+): AttributeBlock => {
+  const out = { ...block };
+  for (const [key, value] of Object.entries(over)) {
+    out[key as keyof AttributeBlock] += value;
+  }
+  return out;
+};
+
+const projection = (talentTotal: number, talentStartLevel = 29) =>
+  projectPlan({
+    baseStats: WARRIOR.baseStats,
+    allocation: WARRIOR.allocation,
+    ratio: 2,
+    talentStartLevel,
+    talentTotal,
+    maxLevel: WARRIOR.maxLevel,
+    pointsPerLevel: WARRIOR.pointsPerLevel,
+  });
+
+const compute = (over: Partial<Build>) =>
+  computeBuild(warrior(over), WARRIOR, CATALOG);
+
+describe('computeBuild', () => {
+  it.each([1, 20, 29, 40])(
+    "matches today's planner with the tested weapons at level %i",
+    (level) => {
+      const snapshot = compute({ level, gear: { main: ls, swap: gs } });
+      const totals = projection(23);
+      const model = dpsModel({
+        plan: totals,
+        base: WARRIOR.baseStats,
+        derivation: d,
+        test: newBuild(WARRIOR).dpsTest,
+        weaponAtk: { main: 41, swap: 105 },
+        gearAtkDelta: 0,
+      });
+
+      expect(snapshot.level).toBe(level);
+      expect(snapshot.totals).toEqual(totals);
+      expect(snapshot.attributes).toEqual(totals[level - 1]);
+      expect(snapshot.derived).toEqual(
+        derivedStats(totals[level - 1]!, d, d.reference.gear)
+      );
+      expect(snapshot.dps.ok).toBe(model.ok);
+      for (const l of levels) {
+        expect(snapshot.dps.at(l)).toEqual(model.at(l));
+      }
+      expect(snapshot.talent).toEqual({
+        total: 23,
+        setBy: 'longsword',
+        reachedAt: talentReachedAt(totals, 23),
+      });
+      expect(snapshot.missing).toEqual([]);
+    }
+  );
+
+  it('adds gear attributes before derivation', () => {
+    const snapshot = compute({
+      level: 20,
+      gear: { main: SWORD, helmet: HELM },
+    });
+    const attributes = plus(projection(23)[19]!, { str: 2, con: 1 });
+
+    expect(snapshot.attributes).toEqual(attributes);
+    expect(snapshot.gear.stats.physicalAtk.value).toBe(44);
+    expect(snapshot.derived.attack).toBeCloseTo(
+      derivedStats(attributes, d, [{ stat: 'physicalAtk', value: 44 }]).attack,
+      10
+    );
+  });
+
+  it("the build's own non-weapon gear doesn't move DPS", () => {
+    const bare = compute({ gear: { main: ls, swap: gs } });
+    const helmed = compute({
+      gear: { main: ls, swap: gs, helmet: { ...HELM, lunagemId: 'ruby' } },
+    });
+
+    for (const l of levels) {
+      expect(helmed.dps.at(l)).toEqual(bare.dps.at(l));
+    }
+  });
+
+  it('defaults missing test attributes to base plus main-in-hand gear', () => {
+    const build = warrior({ gear: { main: SWORD } });
+    const snapshot = computeBuild(
+      { ...build, dpsTest: { ...build.dpsTest, attributes: {} } },
+      WARRIOR,
+      CATALOG
+    );
+
+    // stat part 100 − 41, plus the sword's 40; its +2 STR is in the test reading
+    expect(snapshot.dps.at(1).mainAtk).toBeCloseTo(99, 10);
+  });
+
+  it('computes swap DPS with the swap weapon in hand', () => {
+    const snapshot = compute({
+      level: 20,
+      gear: { main: gs, swap: { ...SWORD, enhancement: 5 } },
+    });
+    const model = (plan: AttributeBlock[]) =>
+      dpsModel({
+        plan,
+        base: WARRIOR.baseStats,
+        derivation: d,
+        test: newBuild(WARRIOR).dpsTest,
+        weaponAtk: { main: 105, swap: 60 },
+        gearAtkDelta: 0,
+      }).at(20);
+
+    expect(snapshot.dps.at(20).mainAtk).toBe(model(snapshot.totals).mainAtk);
+    expect(snapshot.dps.at(20).swapAtk).toBe(
+      model(snapshot.totals.map((totals) => plus(totals, { str: 3 }))).swapAtk
+    );
+  });
+
+  it('falls back to the tested ATK when the weapon publishes none', () => {
+    const build = warrior({ gear: { main: piece('atkless') } });
+    const snapshot = computeBuild(
+      { ...build, dpsTest: { ...build.dpsTest, attributes: {} } },
+      WARRIOR,
+      CATALOG
+    );
+
+    expect(snapshot.dps.at(1).mainAtk).toBeCloseTo(100, 10);
+  });
+
+  it('clamps level and talent start to the class', () => {
+    const snapshot = compute({
+      level: 99,
+      allocation: { ratio: '2', talentStartLevel: 99 },
+      gear: { main: ls },
+    });
+
+    expect(snapshot.level).toBe(40);
+    expect(snapshot.totals).toEqual(projection(23, 40));
+  });
+
+  it('lists missing ids and leaves them out of the maths', () => {
+    const snapshot = compute({
+      gear: { main: ls, swap: gs, chest: piece('gone') },
+      candidate: { slot: 'ring', piece: piece('mage-ring') },
+    });
+    const clean = compute({ gear: { main: ls, swap: gs } });
+
+    expect(snapshot.missing).toEqual(['gone', 'mage-ring']);
+    expect(snapshot.derived).toEqual(clean.derived);
+    expect(snapshot.dps.at(20)).toEqual(clean.dps.at(20));
+  });
+
+  it("throws when the class isn't the build's", () => {
+    expect(() => computeBuild(newBuild(MAGE), WARRIOR, CATALOG)).toThrow();
   });
 });

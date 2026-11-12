@@ -1,8 +1,25 @@
 import z from 'zod';
 
 import { Class, slugSchema } from '../../models/classes/class.ts';
-import { DpsTest } from './dps.ts';
-import { gearPieceSchema, gearSlotSchema } from './gear.ts';
+import {
+  PlanRatio,
+  projectPlan,
+  talentReachedAt,
+  talentTarget,
+} from './allocate.ts';
+import { DerivedStats, derivedStats } from './derive.ts';
+import { DpsAtLevel, dpsModel, DpsTest } from './dps.ts';
+import {
+  equippedItems,
+  GearBonuses,
+  gearBonuses,
+  GearCatalog,
+  gearPieceSchema,
+  GearSet,
+  gearSlotSchema,
+  pieceAtk,
+} from './gear.ts';
+import { ATTRIBUTE_KEYS, AttributeBlock, STAT_IDS } from './stats.ts';
 
 export const BUILD_STORAGE_KEY = 'auroria-build-v1';
 
@@ -106,4 +123,140 @@ export function decodeBuild(
   } catch {
     return { ok: false };
   }
+}
+
+export type BuildSnapshot = {
+  /** build.level clamped to the class. */
+  level: number;
+  /** Allocation only, no gear; index 0 is level 1. */
+  totals: AttributeBlock[];
+  /** Totals at `level` plus the gear with the main weapon in hand. */
+  attributes: AttributeBlock;
+  derived: DerivedStats;
+  /** Main weapon in hand. */
+  gear: GearBonuses;
+  dps: { ok: boolean; at(level: number): DpsAtLevel };
+  talent: { total: number; setBy: string | null; reachedAt: number | null };
+  missing: string[];
+};
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
+
+const plus = (a: AttributeBlock, b: AttributeBlock): AttributeBlock =>
+  Object.fromEntries(
+    ATTRIBUTE_KEYS.map((key) => [key, a[key] + b[key]])
+  ) as AttributeBlock;
+
+/** Physical ATK of everything but the weapons, which enter DPS as weaponAtk. */
+function otherAtk(set: GearSet, catalog: GearCatalog): number {
+  const gear = Object.fromEntries(
+    Object.entries(set.gear).filter(
+      ([slot]) => slot !== 'main' && slot !== 'swap'
+    )
+  );
+
+  return gearBonuses({ classId: set.classId, gear }, catalog, 'main').stats
+    .physicalAtk.value;
+}
+
+/** `testGear` is the gear the DPS test was read with, main weapon in hand. */
+function snapshot(
+  build: Build,
+  cls: Class,
+  catalog: GearCatalog,
+  testGear: Build['gear']
+): BuildSnapshot {
+  if (build.classId !== cls.id) {
+    throw new Error(`Build is for ${build.classId}, not ${cls.id}`);
+  }
+
+  const level = clamp(build.level, 1, cls.maxLevel);
+  const main = gearBonuses(build, catalog, 'main');
+  const swap = gearBonuses(build, catalog, 'swap');
+
+  const target = talentTarget(cls.baseStats.tal, equippedItems(build, catalog));
+  const totals = projectPlan({
+    baseStats: cls.baseStats,
+    allocation: cls.allocation,
+    ratio: Number(build.allocation.ratio) as PlanRatio,
+    talentStartLevel: clamp(build.allocation.talentStartLevel, 2, cls.maxLevel),
+    talentTotal: target.total,
+    maxLevel: cls.maxLevel,
+    pointsPerLevel: cls.pointsPerLevel,
+  });
+
+  const attributes = plus(totals[level - 1]!, main.attributes);
+  const derived = derivedStats(
+    attributes,
+    cls.derivation,
+    STAT_IDS.map((stat) => ({ stat, value: main.stats[stat].value }))
+  );
+
+  const testSet = { classId: build.classId, gear: testGear };
+  const dpsInput = {
+    base: plus(cls.baseStats, gearBonuses(testSet, catalog, 'main').attributes),
+    derivation: cls.derivation,
+    test: build.dpsTest,
+    weaponAtk: {
+      main: pieceAtk(build, catalog, 'main'),
+      swap: pieceAtk(build, catalog, 'swap'),
+    },
+    gearAtkDelta: otherAtk(build, catalog) - otherAtk(testSet, catalog),
+  };
+  const mainModel = dpsModel({
+    ...dpsInput,
+    plan: totals.map((at) => plus(at, main.attributes)),
+  });
+  const swapModel = dpsModel({
+    ...dpsInput,
+    plan: totals.map((at) => plus(at, swap.attributes)),
+  });
+
+  const missing = new Set(main.missing);
+  if (build.candidate) {
+    const { slot, piece } = build.candidate;
+    for (const id of gearBonuses(
+      { classId: build.classId, gear: { [slot]: piece } },
+      catalog,
+      'main'
+    ).missing) {
+      missing.add(id);
+    }
+  }
+
+  return {
+    level,
+    totals,
+    attributes,
+    derived,
+    gear: main,
+    dps: {
+      ok: mainModel.ok && swapModel.ok,
+      at(dpsLevel) {
+        const inMain = mainModel.at(dpsLevel);
+        const inSwap = swapModel.at(dpsLevel);
+        return {
+          mainAtk: inMain.mainAtk,
+          swapAtk: inSwap.swapAtk,
+          main: inMain.main,
+          swap: inSwap.swap,
+        };
+      },
+    },
+    talent: {
+      total: target.total,
+      setBy: target.setBy,
+      reachedAt: talentReachedAt(totals, target.total),
+    },
+    missing: [...missing],
+  };
+}
+
+export function computeBuild(
+  build: Build,
+  cls: Class,
+  catalog: GearCatalog
+): BuildSnapshot {
+  return snapshot(build, cls, catalog, build.gear);
 }

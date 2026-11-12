@@ -218,6 +218,11 @@ function resolve(
 const isAttribute = (stat: AttributeKey | StatId): stat is AttributeKey =>
   (ATTRIBUTE_KEYS as readonly string[]).includes(stat);
 
+/** Resolved items of every equipped slot, both weapons included. */
+export function equippedItems(set: GearSet, catalog: GearCatalog): GearItem[] {
+  return resolve(set, catalog).resolved.map(({ item }) => item);
+}
+
 /** Only the weapon in `inHand` counts; the other hand is still checked for missing ids. */
 export function gearBonuses(
   set: GearSet,
