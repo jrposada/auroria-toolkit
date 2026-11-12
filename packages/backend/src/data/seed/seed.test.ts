@@ -1,9 +1,22 @@
 import { classSchema } from '@jrposada/auroria-toolkit-shared/models/classes/class';
+import { materialSchema } from '@jrposada/auroria-toolkit-shared/models/materials/material';
+import type { Recipe } from '@jrposada/auroria-toolkit-shared/models/recipes/recipe';
+import { recipeSchema } from '@jrposada/auroria-toolkit-shared/models/recipes/recipe';
 import { weaponSchema } from '@jrposada/auroria-toolkit-shared/models/weapons/weapon';
 import { describe, expect, it } from 'vitest';
 import { ZodError } from 'zod';
 
-import { parseSeed, parseSeedFile, toClassRow, toWeaponRow } from './seed.ts';
+import { MATERIALS, RECIPES } from './crafting-fixtures.ts';
+import {
+  assertRecipeReferences,
+  parseSeed,
+  parseSeedFile,
+  toClassRow,
+  toMaterialRow,
+  toRecipeIngredientRows,
+  toRecipeRow,
+  toWeaponRow,
+} from './seed.ts';
 
 const LONGSWORD_IDS = [
   'pioneer-longsword',
@@ -78,6 +91,11 @@ describe('seed files', () => {
     expect(seed.classes).toEqual([WARRIOR]);
   });
 
+  it('holds no materials and no recipes yet', () => {
+    expect(seed.materials).toEqual([]);
+    expect(seed.recipes).toEqual([]);
+  });
+
   it('holds 15 weapons in reference order', () => {
     expect(seed.weapons).toHaveLength(15);
     expect(seed.weapons.map((weapon) => weapon.id)).toEqual([
@@ -87,7 +105,12 @@ describe('seed files', () => {
   });
 
   it('has unique ids', () => {
-    for (const items of [seed.classes, seed.weapons]) {
+    for (const items of [
+      seed.classes,
+      seed.weapons,
+      seed.materials,
+      seed.recipes,
+    ]) {
       const ids = items.map((item) => item.id);
       expect(new Set(ids).size).toBe(ids.length);
     }
@@ -260,5 +283,119 @@ describe('seed files', () => {
       ...rest,
       classId,
     });
+  });
+});
+
+function recipe(id: string): Recipe {
+  const found = RECIPES.find((item) => item.id === id);
+  if (!found) throw new Error(`No fixture recipe ${id}`);
+  return found;
+}
+
+describe('crafting fixtures', () => {
+  it('parse as seed files', () => {
+    expect(
+      parseSeedFile(materialSchema, { version: 1, items: MATERIALS })
+    ).toEqual(MATERIALS);
+    expect(parseSeedFile(recipeSchema, { version: 1, items: RECIPES })).toEqual(
+      RECIPES
+    );
+  });
+
+  it('builds a material row with every field', () => {
+    expect(toMaterialRow({ id: 'charcoal', name: 'Charcoal' })).toEqual({
+      id: 'charcoal',
+      name: 'Charcoal',
+    });
+  });
+
+  it('builds a recipe row with the output flattened and no ingredients', () => {
+    expect(toRecipeRow(recipe('iron-ingot-bulk-smelting'))).toEqual({
+      id: 'iron-ingot-bulk-smelting',
+      outputMaterialId: 'iron-ingot',
+      outputQuantity: 5,
+      station: 'Smelter',
+      profession: 'Metalwork',
+      professionLevel: 10,
+      goldCost: 50,
+    });
+  });
+
+  it('builds one ingredient row per ingredient', () => {
+    expect(toRecipeIngredientRows(recipe('iron-ingot-bulk-smelting'))).toEqual([
+      {
+        recipeId: 'iron-ingot-bulk-smelting',
+        materialId: 'charcoal',
+        quantity: 2,
+      },
+      {
+        recipeId: 'iron-ingot-bulk-smelting',
+        materialId: 'iron-ore',
+        quantity: 12,
+      },
+    ]);
+  });
+
+  it('builds no ingredient rows for a recipe without ingredients', () => {
+    expect(
+      toRecipeIngredientRows({
+        ...recipe('iron-ingot-smelting'),
+        ingredients: [],
+      })
+    ).toEqual([]);
+  });
+});
+
+describe('assertRecipeReferences', () => {
+  const without = (id: string) => MATERIALS.filter((item) => item.id !== id);
+
+  it('accepts the fixtures', () => {
+    expect(() =>
+      assertRecipeReferences({ materials: MATERIALS, recipes: RECIPES })
+    ).not.toThrow();
+  });
+
+  it('accepts an empty seed', () => {
+    expect(() =>
+      assertRecipeReferences({ materials: [], recipes: [] })
+    ).not.toThrow();
+  });
+
+  it('throws when an ingredient references a missing material', () => {
+    expect(() =>
+      assertRecipeReferences({
+        materials: without('charcoal'),
+        recipes: RECIPES,
+      })
+    ).toThrow(
+      'Recipe iron-ingot-bulk-smelting references missing material charcoal'
+    );
+  });
+
+  it('throws when the output references a missing material', () => {
+    expect(() =>
+      assertRecipeReferences({
+        materials: without('steel-ingot'),
+        recipes: RECIPES,
+      })
+    ).toThrow(
+      'Recipe steel-ingot-forging references missing material steel-ingot'
+    );
+  });
+
+  it('throws when a recipe lists a material twice', () => {
+    const doubled = {
+      ...recipe('iron-ingot-smelting'),
+      ingredients: [
+        { materialId: 'iron-ore', quantity: 3 },
+        { materialId: 'iron-ore', quantity: 1 },
+      ],
+    };
+
+    expect(() =>
+      assertRecipeReferences({ materials: MATERIALS, recipes: [doubled] })
+    ).toThrow(
+      'Recipe iron-ingot-smelting lists material iron-ore more than once'
+    );
   });
 });
