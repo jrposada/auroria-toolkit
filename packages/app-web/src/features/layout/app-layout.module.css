@@ -1,7 +1,6 @@
-/* Left-aligned on purpose: no auto margins. */
 .wrap {
   max-width: var(--content-width);
-  margin: 0;
+  margin: 0 auto;
   padding: 0 var(--space-5);
 }
 
