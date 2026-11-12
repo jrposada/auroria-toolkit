@@ -18,4 +18,27 @@ describe('Given the localization resources', () => {
       'No recipes yet. Recipe data is on the way.'
     );
   });
+
+  it('then the planner copy matches the reference', () => {
+    const t = resources.en.translation;
+
+    expect(t['stat_planner.dps.invalid']).toBe(
+      "Test Attack must be higher than the Longsword's ATK. Check the test numbers."
+    );
+    expect(t['stat_planner.dps.example']).toBe(
+      'Example numbers: run the test and replace them'
+    );
+    expect(t['stat_planner.next.max']).toBe('Max level in this plan');
+    expect(t['stat_planner.tip.tempering_note']).toBe(
+      'Per attempt. F/V/B = Faint, Vivid, Brilliant Weapon Tempering Stones. Success: 100% at +1, 20% at +5 and +10, 10% at +15.'
+    );
+  });
+
+  it('then no planner string joins fragments with a middle dot', () => {
+    const planner = Object.entries(resources.en.translation).filter(([key]) =>
+      key.startsWith('stat_planner.')
+    );
+
+    expect(planner.filter(([, value]) => value.includes('·'))).toEqual([]);
+  });
 });

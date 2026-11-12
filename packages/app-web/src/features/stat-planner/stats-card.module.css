@@ -1,0 +1,70 @@
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 300px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 7px var(--space-2) 7px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.table thead th {
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+.table tbody td {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.total {
+  font-weight: 600;
+}
+
+.barCell {
+  width: 36%;
+}
+
+.bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--bg);
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--muted) 50%, transparent);
+}
+
+tr[data-tone='strength'] .bar i {
+  background: var(--accent);
+}
+
+tr[data-tone='constitution'] .bar i {
+  background: var(--con);
+}
+
+tr[data-tone='talent'] .bar i {
+  background: var(--brass);
+}

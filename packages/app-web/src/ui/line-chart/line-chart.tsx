@@ -65,7 +65,7 @@ const LineChart: FunctionComponent<LineChartProps> = ({
               id: s.id,
               color: s.color,
               y: y(last),
-              text: markerTitle(s, last),
+              text: `${s.label} ${formatValue(last)}`,
             },
           ];
     })
