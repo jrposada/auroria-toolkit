@@ -1,0 +1,51 @@
+{
+  "name": "@jrposada/auroria-toolkit-app-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "author": {
+    "email": "jrposada.dev@gmail.com",
+    "name": "Javier Rodriguez Posada"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrposada/auroria-toolkit.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": "^10"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:format": "prettier . --check",
+    "lint:types": "tsc --build",
+    "lint": "run-p lint:*",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "react-dom": "19.3.0",
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react-dom": "~19.3.0",
+    "@types/react": "catalog:",
+    "@vitejs/plugin-react": "5.2.0",
+    "eslint": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "globals": "catalog:",
+    "npm-run-all": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vite-tsconfig-paths": "5.1.4",
+    "vite": "7.3.3",
+    "vitest": "catalog:"
+  }
+}

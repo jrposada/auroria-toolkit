@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "verbatimModuleSyntax": false,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@jrposada/auroria-toolkit-shared/*": ["../shared/src/*"]
+    }
+  }
+}

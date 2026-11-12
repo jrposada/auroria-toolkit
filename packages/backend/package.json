@@ -1,0 +1,40 @@
+{
+  "name": "@jrposada/auroria-toolkit-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "author": {
+    "email": "jrposada.dev@gmail.com",
+    "name": "Javier Rodriguez Posada"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrposada/auroria-toolkit.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": "^10"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev:server": "TSX_TSCONFIG_PATH=tsconfig.dev.json tsx watch src/index.ts",
+    "dev": "pnpm dev:server",
+    "start": "node dist/index.js",
+    "lint:eslint": "eslint .",
+    "lint:format": "prettier . --check",
+    "lint:types": "tsc --noEmit -p tsconfig.dev.json",
+    "lint": "run-p lint:*"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "globals": "catalog:",
+    "npm-run-all": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  }
+}
