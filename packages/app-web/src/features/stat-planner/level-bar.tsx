@@ -2,6 +2,7 @@ import { FunctionComponent, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import Button from '../../ui/button/button';
 import StepperButton from '../../ui/stepper-button/stepper-button';
 import styles from './level-bar.module.css';
 import { levelKeyDelta } from './level-keys';
@@ -96,14 +97,14 @@ const LevelBar: FunctionComponent<LevelBarProps> = ({ maxLevel }) => {
         className={styles.jump}
       >
         {shortcuts.map((shortcut) => (
-          <button
+          <Button
             key={shortcut}
-            type="button"
+            size="sm"
             aria-pressed={shortcut === level}
             onClick={() => setLevel(shortcut)}
           >
             {t('stat_planner.level.shortcut', { level: shortcut })}
-          </button>
+          </Button>
         ))}
       </div>
     </section>

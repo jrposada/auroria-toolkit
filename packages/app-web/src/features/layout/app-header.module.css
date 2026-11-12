@@ -3,12 +3,12 @@
   gap: var(--space-6);
   align-items: baseline;
   padding-top: var(--space-4);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--rule);
 }
 
 .name {
   color: var(--ink);
-  font-family: var(--font-display);
+  font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: 0.02em;

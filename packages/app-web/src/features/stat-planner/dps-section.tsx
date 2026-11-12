@@ -2,10 +2,10 @@ import { FunctionComponent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
 import Chip from '../../ui/chip/chip';
 import Field from '../../ui/field/field';
 import LineChart from '../../ui/line-chart/line-chart';
+import Section from '../../ui/section/section';
 import styles from './dps-section.module.css';
 import {
   calibrationValues,
@@ -76,9 +76,9 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
 
   return (
     <>
-      <Card
+      <Section
         title={t('stat_planner.dps.title', { level: plan.level })}
-        aside={
+        actions={
           plan.values.testInputsEdited ? undefined : (
             <Chip variant="talent">{t('stat_planner.dps.example')}</Chip>
           )
@@ -160,13 +160,14 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
                 {
                   id: 'ls',
                   label: t('stat_planner.weapons.ls'),
-                  color: 'var(--accent)',
+                  color: 'var(--sea)',
                   values: series.ls,
                 },
                 {
                   id: 'gs',
                   label: t('stat_planner.weapons.gs'),
-                  color: 'var(--brass)',
+                  color: 'var(--ink)',
+                  dash: '6 4',
                   values: series.gs,
                 },
               ]}
@@ -186,7 +187,7 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
             />
           </div>
         )}
-      </Card>
+      </Section>
 
       <section data-field-text className={styles.fieldText}>
         <div>

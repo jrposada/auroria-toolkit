@@ -1,15 +1,18 @@
 :root {
-  --bg: #f3f4f2;
-  --surface: #ffffff;
-  --ink: #1d2422;
-  --muted: #5d6a66;
-  --line: #d9dedb;
-  --accent: #23735f;
-  --accent-soft: #e2f0ea;
-  --brass: #a86b12;
-  --brass-soft: #f7ecd8;
-  --con: #3f5f8a;
-  --warn: #9a3b2a;
+  --paper: #edf0ea;
+  --sheet: #f8f9f5;
+  --ink: #1c2a33;
+  --ink-soft: #55656b;
+  --rule: #c9d2ce;
+  --sea: #2f6a88;
+  --luna: #5b43c9;
+  --warn: #a3262a;
+
+  /* Declared once: they resolve against whichever --sea and --paper the theme sets. */
+  --depth-1: color-mix(in oklab, var(--sea) 8%, var(--paper));
+  --depth-2: color-mix(in oklab, var(--sea) 16%, var(--paper));
+  --depth-3: color-mix(in oklab, var(--sea) 26%, var(--paper));
+  --depth-4: color-mix(in oklab, var(--sea) 38%, var(--paper));
 
   --r-common: #8a8f8c;
   --r-uncommon: #3f9a4f;
@@ -17,29 +20,30 @@
   --r-epic: #8a4fc4;
   --r-legendary: #d0802a;
 
-  /* Item-card skin: dark in both themes. */
-  --tip-bg: #14191b;
-  --tip-ink: #e8ecea;
-  --tip-muted: #a9b3b0;
-  --tip-line: #2c3436;
-  --tip-good: #7fd3a8;
-  --tip-bad: #f19a86;
-  --tip-luna: #b9a6ff;
-  --tip-magic: #6c7cff;
-  --tip-note: #e8c37a;
+  /* Item-card skin: the dark palette in both themes. */
+  --tip-bg: #162a35;
+  --tip-ink: #e3eae6;
+  --tip-muted: #93a6ab;
+  --tip-line: #2a4350;
+  --tip-good: #6fb7d6;
+  --tip-bad: #f08a80;
+  --tip-luna: #ac9bff;
+  --tip-magic: #6fb7d6;
+  --tip-note: #f08a80;
 
-  --font-display: 'Spectral SC', Georgia, 'Times New Roman', serif;
-  --font-body:
-    'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono:
-    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --lift: 0 8px 24px rgb(28 42 51 / 18%);
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
-  --text-md: 0.9375rem;
+  --font-serif: 'Alegreya', Georgia, 'Times New Roman', serif;
+  --font-sans:
+    'Alegreya Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Ratio 1.25 from a 16px base. */
+  --text-sm: 0.8rem;
+  --text-md: 1rem;
   --text-lg: 1.25rem;
-  --text-xl: 1.875rem;
-  --text-display: 2.75rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.953125rem;
+  --text-3xl: 2.44140625rem;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -50,8 +54,9 @@
   --space-8: 32px;
   --space-12: 48px;
 
-  --radius-control: 8px;
-  --radius-panel: 10px;
+  /* Radius encodes hierarchy: controls, then floating layers; page regions are square. */
+  --radius-control: 4px;
+  --radius-float: 8px;
   --content-width: 1040px;
   --fade: 120ms;
 
@@ -60,32 +65,28 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #131817;
-    --surface: #1b2220;
-    --ink: #e6ecea;
-    --muted: #9aa8a3;
-    --line: #2c3633;
-    --accent: #5cc0a2;
-    --accent-soft: #1d3a31;
-    --brass: #e0a548;
-    --brass-soft: #3a2d17;
-    --con: #8fb0e0;
-    --warn: #ef8a74;
+    --paper: #10202a;
+    --sheet: #162a35;
+    --ink: #e3eae6;
+    --ink-soft: #93a6ab;
+    --rule: #2a4350;
+    --sea: #6fb7d6;
+    --luna: #ac9bff;
+    --warn: #f08a80;
+    --lift: 0 8px 24px rgb(0 0 0 / 45%);
     color-scheme: dark;
   }
 }
 
 :root[data-theme='dark'] {
-  --bg: #131817;
-  --surface: #1b2220;
-  --ink: #e6ecea;
-  --muted: #9aa8a3;
-  --line: #2c3633;
-  --accent: #5cc0a2;
-  --accent-soft: #1d3a31;
-  --brass: #e0a548;
-  --brass-soft: #3a2d17;
-  --con: #8fb0e0;
-  --warn: #ef8a74;
+  --paper: #10202a;
+  --sheet: #162a35;
+  --ink: #e3eae6;
+  --ink-soft: #93a6ab;
+  --rule: #2a4350;
+  --sea: #6fb7d6;
+  --luna: #ac9bff;
+  --warn: #f08a80;
+  --lift: 0 8px 24px rgb(0 0 0 / 45%);
   color-scheme: dark;
 }

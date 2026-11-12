@@ -10,7 +10,7 @@
   gap: var(--space-1) var(--space-5);
   margin: calc(-1 * var(--space-2)) 0 0;
   padding: 0;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
   list-style: none;
 }
@@ -27,7 +27,7 @@
   gap: var(--space-1);
   max-width: 90ch;
   margin-top: var(--space-4);
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }
 

@@ -13,9 +13,14 @@ import {
   yTicks,
 } from './line-chart-geometry';
 
+type ChartSeries = LineChartSeries & {
+  /** An SVG stroke-dasharray, so series stay apart without colour. */
+  dash?: string;
+};
+
 type LineChartProps = {
   ariaLabel: string;
-  series: LineChartSeries[];
+  series: ChartSeries[];
   /** The x values to label, e.g. [1, 10, 20, 30, 40]. */
   xTicks: number[];
   /** Gridline interval. */
@@ -143,7 +148,7 @@ const LineChart: FunctionComponent<LineChartProps> = ({
             data-series={s.id}
             className={styles.line}
             d={linePath(s.values, yMax, plot)}
-            style={{ stroke: s.color }}
+            style={{ stroke: s.color, strokeDasharray: s.dash }}
           />
         ))}
 

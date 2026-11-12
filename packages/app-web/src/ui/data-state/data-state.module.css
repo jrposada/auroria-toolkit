@@ -5,8 +5,8 @@
 }
 
 .placeholder {
-  border-radius: var(--radius-panel);
-  background: color-mix(in srgb, var(--line) 50%, transparent);
+  border-radius: var(--radius-control);
+  background: color-mix(in oklab, var(--rule) 50%, transparent);
 }
 
 /* Sits on the field, not on a card: it is direction, not a data panel. */
