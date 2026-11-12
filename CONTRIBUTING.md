@@ -49,6 +49,8 @@ pnpm --filter <package-name> build
 pnpm --filter <package-name> test
 ```
 
+Tests run in Node; files named `*.dom.test.tsx` run in jsdom (`// @vitest-environment jsdom` on their first line).
+
 The pre-commit hook checks the branch name and the Node and pnpm versions, then lints the staged files of each package.
 
 ## Contributing
