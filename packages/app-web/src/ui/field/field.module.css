@@ -8,19 +8,30 @@
 .field input,
 .field select {
   width: 100%;
-  padding: 6px 8px;
+  min-height: 36px;
+  padding: var(--space-1) var(--space-2);
   border: 1px solid var(--rule);
-  border-radius: 6px;
-  background: var(--paper);
+  border-radius: var(--radius-control);
+  background: var(--sheet);
   color: var(--ink);
-  font: inherit;
-  font-size: 0.875rem;
-}
-
-.hint {
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
 }
 
 .field [aria-invalid='true'] {
   border-color: var(--warn);
+}
+
+.hint {
+  color: var(--ink-soft);
+}
+
+.error {
+  color: var(--warn);
+}
+
+@media (pointer: coarse) {
+  .field input,
+  .field select {
+    min-height: 44px;
+  }
 }
