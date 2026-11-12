@@ -1,0 +1,50 @@
+/* Colours come from custom properties, so a theme change repaints without a re-render. */
+.chart {
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+
+.grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.tick {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.axisLabel {
+  fill: var(--muted);
+  font-family: var(--font-body);
+  font-size: 11px;
+}
+
+.line {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.endLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.marker {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.dot {
+  stroke: var(--surface);
+  stroke-width: 1.5;
+}

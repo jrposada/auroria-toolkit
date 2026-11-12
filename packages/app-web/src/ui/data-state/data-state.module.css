@@ -1,0 +1,19 @@
+.loading {
+  display: grid;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+.placeholder {
+  border-radius: var(--radius-panel);
+  background: color-mix(in srgb, var(--line) 50%, transparent);
+}
+
+/* Sits on the field, not on a card: it is direction, not a data panel. */
+.error {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--warn);
+}

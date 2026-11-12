@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import globals from 'globals';
 
 export default [
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'src/routeTree.gen.ts'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

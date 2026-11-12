@@ -1,0 +1,30 @@
+.chip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.chip[data-variant='strength'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip[data-variant='constitution'] {
+  background: color-mix(in srgb, var(--con) 16%, transparent);
+  color: var(--con);
+}
+
+.chip[data-variant='talent'] {
+  background: var(--brass-soft);
+  color: var(--brass);
+}
+
+.chip[data-variant='neutral'] {
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 500;
+}
