@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { StatBlock } from '../../common/stat-planner/stats.ts';
+import { AttributeBlock } from '../../common/build/stats.ts';
 import { classSchema, STAT_IDS } from './class.ts';
 import { classesGetByIdParamsSchema } from './classes-get-by-id.ts';
 
@@ -47,7 +47,7 @@ describe('classSchema', () => {
   it('accepts the Warrior class', () => {
     const parsed = classSchema.parse(warrior);
     // compile-time: the schema output fits the planner type
-    const baseStats: StatBlock = parsed.baseStats;
+    const baseStats: AttributeBlock = parsed.baseStats;
     expect(baseStats).toEqual(warrior.baseStats);
     expect(parsed.allocation).toEqual({ primary: 'str', secondary: 'con' });
     expect(parsed.derivation).toEqual(warrior.derivation);
