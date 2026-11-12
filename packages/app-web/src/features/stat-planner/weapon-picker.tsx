@@ -39,12 +39,15 @@ const WeaponPicker: FunctionComponent<WeaponPickerProps> = ({ slot, plan }) => {
     weapon: Weapon;
   } | null>(null);
   const [openDetailId, setOpenDetailId] = useState<string | null>(null);
+  // While focus is inside the group the focused tile is the tab stop, so Tab
+  // leaves the group instead of jumping to the checked tile.
+  const [focusedId, setFocusedId] = useState<string | null>(null);
   const closeTip = useCallback(() => setTip(null), []);
 
   const field = WEAPON_SLOTS.find((entry) => entry.slot === slot)!.field;
   const weapons = plan.weapons[slot];
   const selected = plan.selected[slot];
-  const tabStop = tabStopId(weapons, selected?.id ?? null);
+  const tabStop = tabStopId(weapons, focusedId ?? selected?.id ?? null);
   const groupLabel = t(`stat_planner.weapons.${slot}`);
   const detailId = `weapon-detail-${slot}`;
   const detailWeapon = coarse
@@ -103,6 +106,14 @@ const WeaponPicker: FunctionComponent<WeaponPickerProps> = ({ slot, plan }) => {
         aria-label={groupLabel}
         className={styles.tiles}
         onKeyDown={onKeyDown}
+        onFocus={(event) =>
+          setFocusedId((event.target as HTMLElement).dataset.weapon ?? null)
+        }
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setFocusedId(null);
+          }
+        }}
         onPointerLeave={coarse ? undefined : closeTip}
       >
         {weapons.map((weapon) => {
