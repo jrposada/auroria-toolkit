@@ -1,0 +1,1013 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "pioneer-longsword",
+      "name": "Pioneer Longsword",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Common",
+      "itemLevel": 1,
+      "talentRequirement": null,
+      "weight": 1.5,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": null,
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 32.5,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 100
+          },
+          {
+            "level": 5,
+            "bonusPct": 162.5,
+            "stonesPerTry": {
+              "count": 5,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1000
+          },
+          {
+            "level": 10,
+            "bonusPct": 379.4,
+            "stonesPerTry": {
+              "count": 5,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 7000
+          },
+          {
+            "level": 15,
+            "bonusPct": 650,
+            "stonesPerTry": {
+              "count": 5,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 14500
+          }
+        ]
+      },
+      "howToGet": "Quest reward: A Warm Welcome",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "pirates-longsword",
+      "name": "Pirate's Longsword",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Uncommon",
+      "itemLevel": 6,
+      "talentRequirement": null,
+      "weight": 1.5,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": null,
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 17.8,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 500
+          },
+          {
+            "level": 5,
+            "bonusPct": 88.8,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Faint"
+            },
+            "goldPerTry": 3500
+          },
+          {
+            "level": 10,
+            "bonusPct": 207.2,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 29000
+          },
+          {
+            "level": 15,
+            "bonusPct": 355,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 61000
+          }
+        ]
+      },
+      "howToGet": "Drop: Pallatius the Severer (Lv 5, Lost Docks), 100%",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "city-guard-longsword",
+      "name": "City Guard Longsword",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Uncommon",
+      "itemLevel": 10,
+      "talentRequirement": null,
+      "weight": 1.58,
+      "physicalAtk": 41,
+      "magicAtk": 18,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": "Physical Crit Chance +53–61",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 14.3,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 500
+          },
+          {
+            "level": 5,
+            "bonusPct": 71.3,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Faint"
+            },
+            "goldPerTry": 3500
+          },
+          {
+            "level": 10,
+            "bonusPct": 166.4,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 29000
+          },
+          {
+            "level": 15,
+            "bonusPct": 285,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 61000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing)",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "inheritors-cutlass",
+      "name": "Inheritor's Cutlass",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Rare",
+      "itemLevel": 15,
+      "talentRequirement": null,
+      "weight": 1.65,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": "Physical PEN +2–9",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 13.3,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 66.3,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 154.7,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 265,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing) · Duskglade Ranch completion",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "slins-shortblade",
+      "name": "Slin's Shortblade",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Rare",
+      "itemLevel": 15,
+      "talentRequirement": null,
+      "weight": 1.65,
+      "physicalAtk": 52,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": null,
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 13.3,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 66.3,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 154.7,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 265,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Source not listed",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "martyrs-fang",
+      "name": "Martyr's Fang",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Rare",
+      "itemLevel": 25,
+      "talentRequirement": null,
+      "weight": 1.5,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": null,
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 17.8,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 88.8,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 207.2,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 355,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Drop: Martyr's Fang (Lv 51, Sanctuary of Blessings), 16%",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "tarnished-ancient-longsword",
+      "name": "Tarnished Ancient Longsword",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Rare",
+      "itemLevel": 30,
+      "talentRequirement": 14,
+      "weight": 1.73,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": "Potion Potency +60–81",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 8.5,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 42.5,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 99.2,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 170,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing) · Fell Keep completion",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "twisted-fate-blade",
+      "name": "Twisted Fate Blade",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Epic",
+      "itemLevel": 40,
+      "talentRequirement": 30,
+      "weight": 1.65,
+      "physicalAtk": 92,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": null,
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 13.3,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 4500
+          },
+          {
+            "level": 5,
+            "bonusPct": 66.3,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Faint"
+            },
+            "goldPerTry": 28500
+          },
+          {
+            "level": 10,
+            "bonusPct": 154.7,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 238000
+          },
+          {
+            "level": 15,
+            "bonusPct": 265,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 497000
+          }
+        ]
+      },
+      "howToGet": "Drop: Monstrous Tristan (Lv 51), 20% · Stardrift Hill completion",
+      "notes": "XLGAMES: a “Twisted Faith Sword” gains too many stats when tempered; a fix is pending.",
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "frozen-anguish",
+      "name": "Frozen Anguish",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Epic",
+      "itemLevel": 45,
+      "talentRequirement": 18,
+      "weight": 1.8,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": "Tidal ATK +13–60",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 7.8,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 4500
+          },
+          {
+            "level": 5,
+            "bonusPct": 39,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Faint"
+            },
+            "goldPerTry": 28500
+          },
+          {
+            "level": 10,
+            "bonusPct": 91.1,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 238000
+          },
+          {
+            "level": 15,
+            "bonusPct": 156,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 497000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing)",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "wrathful-tyrants-horn",
+      "name": "Wrathful Tyrant's Horn",
+      "class": "warrior",
+      "type": "Longsword",
+      "rarity": "Legendary",
+      "itemLevel": 80,
+      "talentRequirement": 23,
+      "weight": 1.95,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 70,
+        "magic": 30
+      },
+      "staggerTrigger": 100,
+      "exhaustTrigger": 100,
+      "lunastone": "Fire ATK +10–67",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 7.5,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 5,
+            "bonusPct": 37.5,
+            "stonesPerTry": {
+              "count": 40,
+              "grade": "Faint"
+            },
+            "goldPerTry": 63000
+          },
+          {
+            "level": 10,
+            "bonusPct": 87.6,
+            "stonesPerTry": {
+              "count": 40,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 525000
+          },
+          {
+            "level": 15,
+            "bonusPct": 150,
+            "stonesPerTry": {
+              "count": 40,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 1093000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing)",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "royal-army-greatsword",
+      "name": "Royal Army Greatsword",
+      "class": "warrior",
+      "type": "Greatsword",
+      "rarity": "Uncommon",
+      "itemLevel": 10,
+      "talentRequirement": null,
+      "weight": 2.63,
+      "physicalAtk": 105,
+      "magicAtk": 12,
+      "damageShare": {
+        "physical": 180,
+        "magic": 20
+      },
+      "staggerTrigger": 125,
+      "exhaustTrigger": 110,
+      "lunastone": "Physical Crit Damage +136–157",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 17.8,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 500
+          },
+          {
+            "level": 5,
+            "bonusPct": 88.8,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Faint"
+            },
+            "goldPerTry": 3500
+          },
+          {
+            "level": 10,
+            "bonusPct": 207.2,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 29000
+          },
+          {
+            "level": 15,
+            "bonusPct": 355,
+            "stonesPerTry": {
+              "count": 8,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 61000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing)",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "corrupt-meliots-greatsword",
+      "name": "Corrupt Meliot's Greatsword",
+      "class": "warrior",
+      "type": "Greatsword",
+      "rarity": "Rare",
+      "itemLevel": 14,
+      "talentRequirement": null,
+      "weight": 2.75,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 180,
+        "magic": 20
+      },
+      "staggerTrigger": 125,
+      "exhaustTrigger": 110,
+      "lunastone": null,
+      "extraStat": "Damage to Normal Monsters 16.3",
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 13.3,
+            "stonesPerTry": null,
+            "goldPerTry": null
+          },
+          {
+            "level": 5,
+            "bonusPct": 66.3,
+            "stonesPerTry": null,
+            "goldPerTry": null
+          },
+          {
+            "level": 10,
+            "bonusPct": 154.7,
+            "stonesPerTry": null,
+            "goldPerTry": null
+          },
+          {
+            "level": 15,
+            "bonusPct": 265,
+            "stonesPerTry": null,
+            "goldPerTry": null
+          }
+        ]
+      },
+      "howToGet": "Drop: Meliot (Lv 17, Collapsed Southern Ruins), 80%",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "covenant-greatsword",
+      "name": "Covenant Greatsword",
+      "class": "warrior",
+      "type": "Greatsword",
+      "rarity": "Rare",
+      "itemLevel": 15,
+      "talentRequirement": null,
+      "weight": 2.75,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 180,
+        "magic": 20
+      },
+      "staggerTrigger": 125,
+      "exhaustTrigger": 110,
+      "lunastone": "Damage to Elite Monsters +6–17",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 13.3,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 66.3,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 154.7,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 265,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing) · Arena of the Deceased completion",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "fallen-margrave",
+      "name": "Fallen Margrave",
+      "class": "warrior",
+      "type": "Greatsword",
+      "rarity": "Rare",
+      "itemLevel": 30,
+      "talentRequirement": 14,
+      "weight": 2.88,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 180,
+        "magic": 20
+      },
+      "staggerTrigger": 125,
+      "exhaustTrigger": 110,
+      "lunastone": "Exhaust Trigger +5–12",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 8.5,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 1500
+          },
+          {
+            "level": 5,
+            "bonusPct": 42.5,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Faint"
+            },
+            "goldPerTry": 10000
+          },
+          {
+            "level": 10,
+            "bonusPct": 99.2,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 83000
+          },
+          {
+            "level": 15,
+            "bonusPct": 170,
+            "stonesPerTry": {
+              "count": 12,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 174000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing) · Sandmist Gate completion",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "scattered-mist",
+      "name": "Scattered Mist",
+      "class": "warrior",
+      "type": "Greatsword",
+      "rarity": "Epic",
+      "itemLevel": 60,
+      "talentRequirement": 23,
+      "weight": 3.13,
+      "physicalAtk": null,
+      "magicAtk": null,
+      "damageShare": {
+        "physical": 180,
+        "magic": 20
+      },
+      "staggerTrigger": 125,
+      "exhaustTrigger": 110,
+      "lunastone": "Fog ATK +13–94",
+      "extraStat": null,
+      "tempering": {
+        "steps": [
+          {
+            "level": 1,
+            "bonusPct": 7.5,
+            "stonesPerTry": {
+              "count": 1,
+              "grade": "Faint"
+            },
+            "goldPerTry": 4500
+          },
+          {
+            "level": 5,
+            "bonusPct": 37.5,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Faint"
+            },
+            "goldPerTry": 28500
+          },
+          {
+            "level": 10,
+            "bonusPct": 87.6,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Vivid"
+            },
+            "goldPerTry": 238000
+          },
+          {
+            "level": 15,
+            "bonusPct": 150,
+            "stonesPerTry": {
+              "count": 30,
+              "grade": "Brilliant"
+            },
+            "goldPerTry": 497000
+          }
+        ]
+      },
+      "howToGet": "Crafted (Smithing)",
+      "notes": null,
+      "sources": [
+        {
+          "url": "https://raiddex.com/en/archeage-chronicles/builds",
+          "checked": "2026-11-07"
+        }
+      ]
+    }
+  ]
+}

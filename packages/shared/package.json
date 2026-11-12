@@ -30,6 +30,9 @@
     "lint": "run-p lint:*",
     "test": "vitest run"
   },
+  "dependencies": {
+    "zod": "catalog:"
+  },
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@types/node": "catalog:",
