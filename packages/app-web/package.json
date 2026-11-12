@@ -45,6 +45,7 @@
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@tanstack/router-plugin": "1.167.35",
+    "@testing-library/react": "16.3.2",
     "@types/node": "catalog:",
     "@types/react-dom": "~19.3.0",
     "@types/react": "catalog:",
@@ -54,6 +55,7 @@
     "eslint-plugin-react-refresh": "catalog:",
     "eslint-plugin-simple-import-sort": "catalog:",
     "globals": "catalog:",
+    "jsdom": "31.0.0",
     "npm-run-all": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
