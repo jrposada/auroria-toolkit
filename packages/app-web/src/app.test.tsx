@@ -3,6 +3,12 @@ import { describe, expect, it } from 'vitest';
 
 import { renderRoute } from './test/render-route';
 
+function navLinkTag(html: string, label: string): string {
+  const match = html.match(new RegExp(`<a[^>]*>${label}</a>`));
+  if (!match) throw new Error(`No link labelled ${label}`);
+  return match[0];
+}
+
 describe('Given the app routes', () => {
   it('when opening / then it redirects to /stat-planner', async () => {
     const { pathname } = await renderRoute('/');
@@ -31,7 +37,8 @@ describe('Given the app routes', () => {
     expect(html).toMatch(/<header[^>]*>.*Auroria Toolkit.*<\/header>/s);
     expect(html).toMatch(/<nav[^>]*aria-label="Tools"/);
     expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>Stat planner<\/a>/);
-    expect(html).not.toContain('Crafting');
+    expect(html).toMatch(/<a[^>]*href="\/crafting"[^>]*>Crafting<\/a>/);
+    expect(navLinkTag(html, 'Crafting')).not.toContain('aria-current');
   });
 
   it('when opening an unknown path then the header and footer render once', async () => {
@@ -79,5 +86,63 @@ describe('Given the app routes', () => {
     expect(html).toContain('role="alert"');
     expect(html).toContain('>Retry<');
     expect(html).not.toContain('Game data loaded');
+  });
+
+  it('when opening /crafting with no recipes then it shows the empty state with a way back', async () => {
+    const queryClient = new QueryClient();
+    queryClient.setQueryData(['recipes'], []);
+
+    const { html } = await renderRoute('/crafting', queryClient);
+
+    expect(html).toMatch(/<main[^>]*>.*<h1[^>]*>Crafting<\/h1>/s);
+    expect(html).toContain('No recipes yet. Recipe data is on the way.');
+    expect(html).toMatch(
+      /<a[^>]*href="\/stat-planner"[^>]*>Go to the stat planner<\/a>/
+    );
+    expect(html).not.toContain('aria-busy');
+    expect(html).not.toContain('role="alert"');
+  });
+
+  it('when opening /crafting then the header marks Crafting as the current tool', async () => {
+    const { html } = await renderRoute('/crafting');
+
+    expect(navLinkTag(html, 'Crafting')).toContain('aria-current="page"');
+    expect(navLinkTag(html, 'Stat planner')).not.toContain('aria-current');
+  });
+
+  it('when recipes are still loading then /crafting shows the loading state, not the empty state', async () => {
+    const { html } = await renderRoute('/crafting');
+
+    expect(html).toContain('aria-busy="true"');
+    expect(html).toContain('<h1');
+    expect(html).not.toContain('No recipes yet');
+  });
+
+  it('when the recipes request failed then /crafting shows the retry message, not the empty state', async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false, retryOnMount: false } },
+    });
+    await queryClient.prefetchQuery({
+      queryKey: ['recipes'],
+      queryFn: () => Promise.reject(new Error('down')),
+    });
+
+    const { html } = await renderRoute('/crafting', queryClient);
+
+    expect(html).toContain('role="alert"');
+    expect(html).toContain('>Retry<');
+    expect(html).not.toContain('No recipes yet');
+  });
+
+  it('when recipes exist then /crafting says how many and drops the empty state', async () => {
+    const queryClient = new QueryClient();
+    queryClient.setQueryData(['recipes'], new Array(3).fill({}));
+
+    const { html } = await renderRoute('/crafting', queryClient);
+
+    expect(html).toContain(
+      'Recipes loaded: 3. The calculator itself is not built yet.'
+    );
+    expect(html).not.toContain('No recipes yet');
   });
 });
