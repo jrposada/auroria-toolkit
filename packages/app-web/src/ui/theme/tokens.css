@@ -57,7 +57,7 @@
   /* Radius encodes hierarchy: controls, then floating layers; page regions are square. */
   --radius-control: 4px;
   --radius-float: 8px;
-  --content-width: 1040px;
+  --content-width: 1200px;
   --fade: 120ms;
 
   color-scheme: light;

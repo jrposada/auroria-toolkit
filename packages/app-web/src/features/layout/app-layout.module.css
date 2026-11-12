@@ -1,7 +1,6 @@
+/* Regions pad themselves to the centred column, so header and footer rules can run full-bleed. */
 .wrap {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 0 var(--space-5);
+  --gutter: var(--space-6);
 }
 
 .main {
@@ -10,10 +9,11 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   padding-block: var(--space-6) var(--space-12);
+  padding-inline: max(var(--gutter), (100% - var(--content-width)) / 2);
 }
 
 @media (max-width: 480px) {
   .wrap {
-    padding: 0 var(--space-4);
+    --gutter: var(--space-4);
   }
 }

@@ -3,6 +3,7 @@
   gap: var(--space-6);
   align-items: baseline;
   padding-top: var(--space-4);
+  padding-inline: max(var(--gutter), (100% - var(--content-width)) / 2);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -10,8 +11,7 @@
   color: var(--ink);
   font-family: var(--font-serif);
   font-size: var(--text-lg);
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 700;
   text-decoration: none;
 }
 
