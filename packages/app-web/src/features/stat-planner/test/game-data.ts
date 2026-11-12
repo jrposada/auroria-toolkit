@@ -1,5 +1,6 @@
 import { Class, classSchema } from '@shared/models/classes/class';
 import { Weapon, weaponSchema } from '@shared/models/weapons/weapon';
+import { QueryClient } from '@tanstack/react-query';
 
 // The backend seed is what the browser gets from the API.
 import classesSeed from '../../../../../backend/src/data/seed/classes.json';
@@ -26,4 +27,16 @@ export function planFor(
   cls: Class = WARRIOR
 ): Plan {
   return computePlan(form, cls, weapons);
+}
+
+/** A client already holding what the planner's two queries return. */
+export function seededQueryClient(weapons: Weapon[] = WEAPONS): QueryClient {
+  const queryClient = new QueryClient();
+  queryClient.setQueryData(['classes', { id: 'warrior' }], WARRIOR);
+  queryClient.setQueryData(
+    ['weapons', { class: 'warrior', type: undefined }],
+    weapons
+  );
+
+  return queryClient;
 }

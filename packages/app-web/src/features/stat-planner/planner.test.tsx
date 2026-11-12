@@ -6,23 +6,12 @@ import { describe, expect, it } from 'vitest';
 import i18n from '../../i18n';
 import Planner from './planner';
 import { DEFAULTS, PlannerForm } from './planner-form';
-import { WARRIOR, WEAPONS } from './test/game-data';
+import { seededQueryClient } from './test/game-data';
 import { textOf } from './test/render';
-
-function seeded(weapons = WEAPONS): QueryClient {
-  const queryClient = new QueryClient();
-  queryClient.setQueryData(['classes', { id: 'warrior' }], WARRIOR);
-  queryClient.setQueryData(
-    ['weapons', { class: 'warrior', type: undefined }],
-    weapons
-  );
-
-  return queryClient;
-}
 
 function render(
   initialForm?: PlannerForm,
-  queryClient: QueryClient = seeded()
+  queryClient: QueryClient = seededQueryClient()
 ): string {
   return renderToStaticMarkup(
     <QueryClientProvider client={queryClient}>
@@ -134,7 +123,7 @@ describe('Given <Planner/>', () => {
   });
 
   it('when there are no weapons then it still renders, with empty groups and base Talent', () => {
-    const html = render(undefined, seeded([]));
+    const html = render(undefined, seededQueryClient([]));
 
     expect(textOf(html)).toContain('Base Talent (11) covers both weapons');
     expect(html).not.toContain('role="radio"');
