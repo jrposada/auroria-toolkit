@@ -7,4 +7,5 @@ export type Tool = {
 
 export const TOOLS: Tool[] = [
   { to: '/stat-planner', labelKey: 'nav.stat_planner' },
+  { to: '/crafting', labelKey: 'nav.crafting' },
 ];

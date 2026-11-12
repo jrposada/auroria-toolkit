@@ -12,4 +12,10 @@ describe('Given the localization resources', () => {
       "Can't load game data. Check that the backend is running, then retry."
     );
   });
+
+  it('then the empty crafting message is the exact copy', () => {
+    expect(resources.en.translation['crafting.empty']).toBe(
+      'No recipes yet. Recipe data is on the way.'
+    );
+  });
 });

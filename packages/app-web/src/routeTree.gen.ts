@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatPlannerRouteImport } from './routes/stat-planner'
+import { Route as CraftingRouteImport } from './routes/crafting'
 import { Route as IndexRouteImport } from './routes/index'
 
 const StatPlannerRoute = StatPlannerRouteImport.update({
   id: '/stat-planner',
   path: '/stat-planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftingRoute = CraftingRouteImport.update({
+  id: '/crafting',
+  path: '/crafting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/crafting': typeof CraftingRoute
   '/stat-planner': typeof StatPlannerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/crafting': typeof CraftingRoute
   '/stat-planner': typeof StatPlannerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/crafting': typeof CraftingRoute
   '/stat-planner': typeof StatPlannerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/stat-planner'
+  fullPaths: '/' | '/crafting' | '/stat-planner'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/stat-planner'
-  id: '__root__' | '/' | '/stat-planner'
+  to: '/' | '/crafting' | '/stat-planner'
+  id: '__root__' | '/' | '/crafting' | '/stat-planner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CraftingRoute: typeof CraftingRoute
   StatPlannerRoute: typeof StatPlannerRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/stat-planner'
       fullPath: '/stat-planner'
       preLoaderRoute: typeof StatPlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafting': {
+      id: '/crafting'
+      path: '/crafting'
+      fullPath: '/crafting'
+      preLoaderRoute: typeof CraftingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CraftingRoute: CraftingRoute,
   StatPlannerRoute: StatPlannerRoute,
 }
 export const routeTree = rootRouteImport

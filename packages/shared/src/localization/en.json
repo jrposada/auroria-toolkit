@@ -2,6 +2,7 @@
   "app.name": "Auroria Toolkit",
   "nav.label": "Tools",
   "nav.stat_planner": "Stat planner",
+  "nav.crafting": "Crafting",
   "theme.label": "Theme",
   "theme.system": "System",
   "theme.light": "Light",
@@ -15,5 +16,9 @@
   "not_found.title": "Page not found",
   "not_found.back": "Go to the stat planner",
   "stat_planner.title": "Stat planner",
-  "stat_planner.placeholder": "Game data loaded: {{className}}, {{count}} weapons. The planner itself is not built yet."
+  "stat_planner.placeholder": "Game data loaded: {{className}}, {{count}} weapons. The planner itself is not built yet.",
+  "crafting.title": "Crafting",
+  "crafting.empty": "No recipes yet. Recipe data is on the way.",
+  "crafting.back": "Go to the stat planner",
+  "crafting.placeholder": "Recipes loaded: {{count}}. The calculator itself is not built yet."
 }
