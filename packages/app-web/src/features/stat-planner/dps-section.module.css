@@ -1,0 +1,158 @@
+.hint {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+/* The top stripe ties each input group to its tile and chart line. */
+.inputs {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding-top: var(--space-2);
+  border-top: 3px solid var(--accent);
+}
+
+.inputs[data-slot='gs'] {
+  border-top-color: var(--brass);
+}
+
+.inputs h3 {
+  margin: 0;
+  font-size: var(--text-md);
+}
+
+.output {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.tile {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3);
+  border-radius: var(--radius-control);
+  background: var(--accent-soft);
+}
+
+.tile[data-slot='gs'] {
+  background: var(--brass-soft);
+}
+
+.tileLabel,
+.tileAttack {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.tileValue {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1.1;
+}
+
+.tile[data-slot='gs'] .tileValue {
+  color: var(--brass);
+}
+
+.verdict {
+  font-weight: 600;
+}
+
+.perStrength {
+  display: grid;
+  margin: 0;
+}
+
+.perStrength div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: 5px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--text-sm);
+}
+
+.perStrength dt {
+  color: var(--muted);
+}
+
+.perStrength dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.testFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.chart {
+  margin-top: var(--space-4);
+}
+
+/* Explanatory text sits on the field under a rule, not in a card. */
+.fieldText {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.fieldText h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+}
+
+.fieldText p,
+.fieldText ol {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.fieldText ol {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: 1.25em;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .output {
+    grid-column: 1 / -1;
+  }
+
+  .fieldText {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

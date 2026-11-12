@@ -54,6 +54,19 @@ describe('Given <LineChart/>', () => {
     expect(marked).toContain('<title>STR 64</title>');
   });
 
+  it('when markerTitle is custom then end labels keep the plain label and value', () => {
+    const marked = renderToStaticMarkup(
+      <LineChart
+        {...props}
+        markerX={27}
+        markerTitle={(s, value) => `${s.label} ${value} at level 27`}
+      />
+    );
+
+    expect(marked).toContain('>STR 95<');
+    expect(marked).toContain('<title>STR 64 at level 27</title>');
+  });
+
   it.each([0, 41, 27.5])(
     'when markerX is %s then it draws no marker',
     (markerX) => {

@@ -1,0 +1,43 @@
+.body {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.note {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.estimates {
+  display: grid;
+  margin: 0;
+}
+
+.estimates div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.estimates div:last-child {
+  border-bottom: 0;
+}
+
+.estimates dt {
+  color: var(--muted);
+}
+
+.estimates dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
