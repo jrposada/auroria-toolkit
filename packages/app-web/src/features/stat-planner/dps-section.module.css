@@ -1,5 +1,5 @@
 .hint {
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }
 
@@ -16,11 +16,11 @@
   gap: var(--space-2);
   align-content: start;
   padding-top: var(--space-2);
-  border-top: 3px solid var(--accent);
+  border-top: 3px solid var(--sea);
 }
 
 .inputs[data-slot='gs'] {
-  border-top-color: var(--brass);
+  border-top-color: var(--ink);
 }
 
 .inputs h3 {
@@ -45,30 +45,30 @@
   gap: 2px;
   padding: var(--space-3);
   border-radius: var(--radius-control);
-  background: var(--accent-soft);
+  background: var(--depth-1);
 }
 
 .tile[data-slot='gs'] {
-  background: var(--brass-soft);
+  background: var(--depth-2);
 }
 
 .tileLabel,
 .tileAttack {
-  color: var(--muted);
-  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
 }
 
 .tileValue {
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 30px;
+  color: var(--sea);
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
   font-weight: 600;
   font-variant-numeric: lining-nums tabular-nums;
   line-height: 1.1;
 }
 
 .tile[data-slot='gs'] .tileValue {
-  color: var(--brass);
+  color: var(--ink);
 }
 
 .verdict {
@@ -85,17 +85,16 @@
   justify-content: space-between;
   gap: var(--space-3);
   padding-block: 5px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--rule);
   font-size: var(--text-sm);
 }
 
 .perStrength dt {
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 
 .perStrength dd {
   margin: 0;
-  font-family: var(--font-mono);
   font-weight: 600;
 }
 
@@ -115,7 +114,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-6);
   padding-top: var(--space-4);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--rule);
 }
 
 .fieldText h3 {
@@ -127,7 +126,7 @@
 .fieldText ol {
   max-width: 72ch;
   margin: 0;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }
 

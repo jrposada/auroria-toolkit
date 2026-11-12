@@ -1,10 +1,9 @@
-import '@fontsource/spectral-sc/500.css';
-import '@fontsource/spectral-sc/600.css';
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/alegreya/400-italic.css';
+import '@fontsource/alegreya/500.css';
+import '@fontsource/alegreya/700.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/500.css';
+import '@fontsource/alegreya-sans/700.css';
 import './ui/theme/tokens.css';
 import './ui/theme/base.css';
 import './i18n';

@@ -9,22 +9,22 @@
 }
 
 .chip[data-variant='strength'] {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--depth-1);
+  color: var(--sea);
 }
 
 .chip[data-variant='constitution'] {
-  background: color-mix(in srgb, var(--con) 16%, transparent);
-  color: var(--con);
+  background: color-mix(in srgb, var(--ink-soft) 16%, transparent);
+  color: var(--ink-soft);
 }
 
 .chip[data-variant='talent'] {
-  background: var(--brass-soft);
-  color: var(--brass);
+  background: var(--depth-2);
+  color: var(--ink);
 }
 
 .chip[data-variant='neutral'] {
-  background: var(--bg);
-  color: var(--muted);
+  background: var(--paper);
+  color: var(--ink-soft);
   font-weight: 500;
 }

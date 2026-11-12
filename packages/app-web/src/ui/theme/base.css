@@ -9,32 +9,47 @@ body {
   margin: 0;
 }
 
+button,
+input,
+select {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: var(--text-md);
+  /* Alegreya defaults to old-style figures, where 40 reads as "4o" and 1 as "I". */
+  font-variant-numeric: lining-nums tabular-nums;
   line-height: 1.5;
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-  /* The face defaults to old-style figures, where 40 reads as "4o" and 1 as "I". */
-  font-variant-numeric: lining-nums;
-  letter-spacing: 0.02em;
-  line-height: 1.15;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.2;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
 }
 
 h2 {
   font-size: var(--text-lg);
+}
+
+h3 {
+  font-size: var(--text-md);
 }
 
 p {
@@ -42,21 +57,18 @@ p {
 }
 
 a {
-  color: var(--accent);
+  color: var(--sea);
 }
 
 button {
   padding: 6px 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--rule);
   border-radius: var(--radius-control);
-  background: var(--surface);
-  color: var(--ink);
-  font: inherit;
-  cursor: pointer;
+  background: var(--sheet);
 }
 
 button:hover {
-  border-color: var(--accent);
+  border-color: var(--sea);
 }
 
 a:focus-visible,
@@ -64,7 +76,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--sea);
   outline-offset: 2px;
 }
 

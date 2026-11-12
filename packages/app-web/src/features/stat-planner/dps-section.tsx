@@ -160,13 +160,13 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
                 {
                   id: 'ls',
                   label: t('stat_planner.weapons.ls'),
-                  color: 'var(--accent)',
+                  color: 'var(--sea)',
                   values: series.ls,
                 },
                 {
                   id: 'gs',
                   label: t('stat_planner.weapons.gs'),
-                  color: 'var(--brass)',
+                  color: 'var(--ink)',
                   values: series.gs,
                 },
               ]}

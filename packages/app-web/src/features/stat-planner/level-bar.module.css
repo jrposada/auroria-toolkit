@@ -9,8 +9,8 @@
   gap: var(--space-5);
   align-items: center;
   padding-block: var(--space-3);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
 }
 
 .readout {
@@ -21,9 +21,9 @@
 
 .number {
   min-width: 2ch;
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: var(--text-display);
+  color: var(--sea);
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
   font-weight: 600;
   font-variant-numeric: lining-nums tabular-nums;
   text-align: center;
@@ -31,8 +31,8 @@
 
 .label {
   margin-top: var(--space-1);
-  color: var(--muted);
-  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
 }
 
 .control {
@@ -50,7 +50,7 @@
 .track input[type='range'] {
   width: 100%;
   margin: 0;
-  accent-color: var(--accent);
+  accent-color: var(--sea);
 }
 
 /* Native thumbs are about 16px wide, so the tick row is inset by half a thumb. */
@@ -58,8 +58,8 @@
   position: relative;
   height: 1.1em;
   margin-inline: 8px;
-  color: var(--muted);
-  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
 }
 
@@ -81,9 +81,9 @@
 }
 
 .jump button[aria-pressed='true'] {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--surface);
+  border-color: var(--sea);
+  background: var(--sea);
+  color: var(--sheet);
 }
 
 @media (max-width: 480px) {
@@ -97,7 +97,7 @@
   }
 
   .number {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
   }
 
   .ticks {

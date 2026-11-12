@@ -11,19 +11,18 @@
 }
 
 .grid {
-  stroke: var(--line);
+  stroke: var(--rule);
   stroke-width: 1;
 }
 
 .tick {
-  fill: var(--muted);
-  font-family: var(--font-mono);
+  fill: var(--ink-soft);
   font-size: 11px;
 }
 
 .axisLabel {
-  fill: var(--muted);
-  font-family: var(--font-body);
+  fill: var(--ink-soft);
+  font-family: var(--font-sans);
   font-size: 11px;
 }
 
@@ -34,7 +33,7 @@
 }
 
 .endLabel {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 600;
 }
@@ -45,6 +44,6 @@
 }
 
 .dot {
-  stroke: var(--surface);
+  stroke: var(--sheet);
   stroke-width: 1.5;
 }

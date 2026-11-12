@@ -7,7 +7,7 @@
 }
 
 .stepper:disabled {
-  border-color: var(--line);
+  border-color: var(--rule);
   opacity: 0.5;
   cursor: default;
 }
