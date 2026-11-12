@@ -36,8 +36,9 @@ import TraitOrder from './trait-order';
 import { usePlan } from './use-plan';
 import WeaponPicker from './weapon-picker';
 
-// Heights of the panels that need game data, so loading does not shift the page.
-const PLACEHOLDER_HEIGHTS = [280, 330, 350, 640, 60, 760];
+// Measured desktop heights of the panels that need game data, so loading
+// does not shift the page.
+const PLACEHOLDER_HEIGHTS = [509, 382, 453, 705, 216, 68, 888, 285];
 
 const PlannerContent: FunctionComponent = () => {
   const { t } = useTranslation();
