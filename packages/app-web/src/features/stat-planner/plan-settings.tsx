@@ -3,6 +3,7 @@ import { FunctionComponent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import Button from '../../ui/button/button';
 import Card from '../../ui/card/card';
 import Field from '../../ui/field/field';
 import styles from './plan-settings.module.css';
@@ -55,9 +56,9 @@ const PlanSettings: FunctionComponent<PlanSettingsProps> = ({ cls }) => {
             })}
           </p>
           <div>
-            <button type="button" onClick={() => reset(DEFAULTS)}>
+            <Button onClick={() => reset(DEFAULTS)}>
               {t('stat_planner.settings.reset')}
-            </button>
+            </Button>
           </div>
         </div>
       </details>

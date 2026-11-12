@@ -74,18 +74,6 @@
   gap: var(--space-1);
 }
 
-.jump button {
-  padding: 6px 10px;
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-}
-
-.jump button[aria-pressed='true'] {
-  border-color: var(--sea);
-  background: var(--sea);
-  color: var(--sheet);
-}
-
 @media (max-width: 480px) {
   .bar {
     grid-template-columns: auto minmax(0, 1fr);

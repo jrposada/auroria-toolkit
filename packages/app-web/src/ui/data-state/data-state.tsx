@@ -1,6 +1,7 @@
 import { FunctionComponent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Button from '../button/button';
 import styles from './data-state.module.css';
 import { DataStatus } from './query-status';
 
@@ -33,9 +34,7 @@ const DataState: FunctionComponent<DataStateProps> = ({
     return (
       <div role="alert" className={styles.error}>
         <p>{t('data_state.error')}</p>
-        <button type="button" onClick={onRetry}>
-          {t('data_state.retry')}
-        </button>
+        <Button onClick={onRetry}>{t('data_state.retry')}</Button>
       </div>
     );
   }
