@@ -1,0 +1,59 @@
+/* The stripe is the slot's colour, shared with the DPS inputs, tiles and chart lines. */
+.picker {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-width: 0;
+  padding-left: var(--space-3);
+  border-left: 4px solid var(--accent);
+}
+
+.picker[data-slot='gs'] {
+  border-left-color: var(--brass);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  align-items: baseline;
+}
+
+.title {
+  font-size: var(--text-lg);
+}
+
+.carried {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.carriedName {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: var(--space-2);
+}
+
+/* Inline item card for touch screens, in the same dark skin as the tooltip. */
+.detail {
+  padding: 12px 14px;
+  border: 1px solid var(--tip-line);
+  border-top: 3px solid var(--tooltip-accent, var(--tip-line));
+  border-radius: var(--radius-control);
+  background: var(--tip-bg);
+  color: var(--tip-ink);
+}
+
+@media (max-width: 480px) {
+  .tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
