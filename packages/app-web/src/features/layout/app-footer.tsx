@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { Fragment, FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styles from './app-footer.module.css';
@@ -9,10 +9,11 @@ const AppFooter: FunctionComponent = () => {
 
   return (
     <footer className={styles.footer}>
-      <p>{t('footer.credits')}</p>
-      <ul className={styles.credits}>
-        {CREDITS.map((credit) => (
-          <li key={credit.name}>
+      <p>
+        {t('footer.credits')}{' '}
+        {CREDITS.map((credit, index) => (
+          <Fragment key={credit.name}>
+            {index > 0 && ', '}
             {credit.url ? (
               <a href={credit.url} rel="noreferrer">
                 {credit.name}
@@ -20,9 +21,10 @@ const AppFooter: FunctionComponent = () => {
             ) : (
               credit.name
             )}
-          </li>
+          </Fragment>
         ))}
-      </ul>
+        .
+      </p>
       <p className={styles.disclaimer}>{t('footer.disclaimer')}</p>
     </footer>
   );

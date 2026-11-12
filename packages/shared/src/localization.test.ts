@@ -15,7 +15,7 @@ describe('Given the localization resources', () => {
 
   it('then the empty crafting message is the exact copy', () => {
     expect(resources.en.translation['crafting.empty']).toBe(
-      'No recipes yet. Recipe data is on the way.'
+      "Recipe data isn't in yet. Once it is, pick a recipe to see the materials and gold it takes."
     );
   });
 
