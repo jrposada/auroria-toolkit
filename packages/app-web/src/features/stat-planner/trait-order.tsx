@@ -2,8 +2,8 @@ import { FunctionComponent } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
 import Field from '../../ui/field/field';
+import Section from '../../ui/section/section';
 import { PlannerForm } from './planner-form';
 import styles from './trait-order.module.css';
 import { TraitPhaseStatus, traitPhaseStatuses } from './trait-phases';
@@ -28,9 +28,9 @@ const TraitOrder: FunctionComponent<TraitOrderProps> = ({ plan }) => {
         : t('stat_planner.traits.later');
 
   return (
-    <Card
+    <Section
       title={t('stat_planner.traits.title')}
-      aside={
+      actions={
         <Field
           label={t('stat_planner.traits.points_label')}
           hint={t('stat_planner.traits.points_hint')}
@@ -66,7 +66,7 @@ const TraitOrder: FunctionComponent<TraitOrderProps> = ({ plan }) => {
           </li>
         ))}
       </ol>
-    </Card>
+    </Section>
   );
 };
 

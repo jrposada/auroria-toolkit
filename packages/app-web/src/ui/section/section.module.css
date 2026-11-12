@@ -1,8 +1,6 @@
-.card {
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-panel);
-  background: var(--surface);
+.section {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--rule);
 }
 
 .head {
@@ -14,7 +12,7 @@
   margin-bottom: var(--space-3);
 }
 
-.aside {
-  color: var(--muted);
+.actions {
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }

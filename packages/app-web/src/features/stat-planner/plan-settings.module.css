@@ -1,5 +1,5 @@
 .summary {
-  font-family: var(--font-display);
+  font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 600;
   cursor: pointer;
@@ -19,7 +19,7 @@
 
 .hint {
   max-width: 72ch;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }
 

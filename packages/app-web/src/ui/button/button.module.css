@@ -1,0 +1,41 @@
+.button {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.button[data-size='md'] {
+  min-height: 36px;
+  padding: var(--space-2) var(--space-3);
+}
+
+.button[data-size='sm'] {
+  min-height: 32px;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--sea);
+}
+
+/* Pressed reads like primary: selection is the one accent. */
+.button[data-variant='primary'],
+.button[aria-pressed='true'] {
+  border-color: var(--sea);
+  background: var(--sea);
+  color: var(--paper);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (pointer: coarse) {
+  .button[data-size] {
+    min-height: 44px;
+  }
+}

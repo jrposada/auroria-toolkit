@@ -2,29 +2,31 @@
   display: inline-flex;
   gap: 6px;
   align-items: baseline;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: var(--text-md);
-  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--text-sm);
+  font-weight: 500;
 }
 
 .chip[data-variant='strength'] {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--depth-1);
+  color: var(--sea);
 }
 
 .chip[data-variant='constitution'] {
-  background: color-mix(in srgb, var(--con) 16%, transparent);
-  color: var(--con);
+  background: var(--depth-1);
+  color: var(--ink);
 }
 
 .chip[data-variant='talent'] {
-  background: var(--brass-soft);
-  color: var(--brass);
+  border-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
 }
 
 .chip[data-variant='neutral'] {
-  background: var(--bg);
-  color: var(--muted);
-  font-weight: 500;
+  border-color: var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
 }

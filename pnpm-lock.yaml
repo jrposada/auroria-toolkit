@@ -86,13 +86,10 @@ importers:
 
   packages/app-web:
     dependencies:
-      '@fontsource/ibm-plex-mono':
+      '@fontsource/alegreya':
         specifier: 5.3.0
         version: 5.3.0
-      '@fontsource/ibm-plex-sans':
-        specifier: 5.3.0
-        version: 5.3.0
-      '@fontsource/spectral-sc':
+      '@fontsource/alegreya-sans':
         specifier: 5.3.0
         version: 5.3.0
       '@hookform/resolvers':
@@ -966,14 +963,11 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@fontsource/ibm-plex-mono@5.3.0':
-    resolution: {integrity: sha512-eTgnZjZEGk1QtD3ZstF+Vclo2HLAni8YMy34/DxllwZvyz1lR/1RF/xTiAquOBO7MvqBx8D2Ig2WCPMVfdZu7Q==}
+  '@fontsource/alegreya-sans@5.3.0':
+    resolution: {integrity: sha512-Uf0RbuwzhSS3NQrBFcRzEUm7TxDQW3qdAbQ6JIOhsIW6V+YN2dqlR99lhfEE38R3GHgMCMJBzqSp7aJxhNXSOw==}
 
-  '@fontsource/ibm-plex-sans@5.3.0':
-    resolution: {integrity: sha512-CbE4CbbEEZJX860XyUiRpsksXIQR8Rp2XDva2VO53NJox9tVNtusrysd2x5YkUEY3ErQ66W1IiiQL8/wihhw5w==}
-
-  '@fontsource/spectral-sc@5.3.0':
-    resolution: {integrity: sha512-0hDy5HDSU/8rahcAGOH9aotND2IrVC4V+9aJY7fN2mTaltrPOYdfALhRtwRPmjnKvnWpSYdRJHRzaVLM3pA26w==}
+  '@fontsource/alegreya@5.3.0':
+    resolution: {integrity: sha512-YCsp9dHYfMNdggXxinMMS0nkGlZkzs2MvPL7qPVjSO4DM1uJ29hmKEdTC/fBP+2K4Aa+4Z44JuOQz05eDcvNJA==}
 
   '@hookform/resolvers@5.2.2':
     resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
@@ -3875,11 +3869,9 @@ snapshots:
 
   '@exodus/bytes@1.16.0': {}
 
-  '@fontsource/ibm-plex-mono@5.3.0': {}
+  '@fontsource/alegreya-sans@5.3.0': {}
 
-  '@fontsource/ibm-plex-sans@5.3.0': {}
-
-  '@fontsource/spectral-sc@5.3.0': {}
+  '@fontsource/alegreya@5.3.0': {}
 
   '@hookform/resolvers@5.2.2(react-hook-form@7.75.0(react@19.3.0))':
     dependencies:

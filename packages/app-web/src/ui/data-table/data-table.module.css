@@ -1,0 +1,39 @@
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+
+.table thead th {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.table tbody th {
+  font-weight: 500;
+}
+
+.table [data-kind='number'],
+.table [data-kind='delta'] {
+  font-variant-numeric: lining-nums tabular-nums;
+  text-align: right;
+}
+
+.table [data-sign='up'] {
+  color: var(--sea);
+}
+
+.table [data-sign='down'] {
+  color: var(--ink-soft);
+}

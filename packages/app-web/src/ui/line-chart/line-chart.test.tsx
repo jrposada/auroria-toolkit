@@ -42,6 +42,14 @@ describe('Given <LineChart/>', () => {
     expect(html).toContain('stroke:var(--accent)');
   });
 
+  it('when a series has a dash then its line is dashed', () => {
+    const dashed = renderToStaticMarkup(
+      <LineChart {...props} series={[{ ...props.series[0]!, dash: '6 4' }]} />
+    );
+
+    expect(dashed).toContain('stroke-dasharray:6 4');
+  });
+
   it('then it draws no marker without markerX', () => {
     expect(count(html, 'data-marker')).toBe(0);
   });

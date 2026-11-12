@@ -4,7 +4,7 @@
 
 .intro {
   max-width: 72ch;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }
 
@@ -16,27 +16,27 @@
   list-style: none;
 }
 
-/* The left border marks progress: verdigris done, brass in progress. */
+/* The left border marks progress: sea done, ink in progress. */
 .phases li {
   display: grid;
   grid-template-columns: 2ch minmax(0, 1fr) auto;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-left: 4px solid var(--line);
+  border-left: 4px solid var(--rule);
   font-size: var(--text-sm);
 }
 
 .phases li[data-state='done'] {
-  border-left-color: var(--accent);
+  border-left-color: var(--sea);
 }
 
 .phases li[data-state='part'] {
-  border-left-color: var(--brass);
+  border-left-color: var(--ink);
 }
 
 .number {
-  color: var(--muted);
-  font-family: var(--font-display);
+  color: var(--ink-soft);
+  font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 600;
   font-variant-numeric: lining-nums;
@@ -53,15 +53,15 @@
 }
 
 .description {
-  color: var(--muted);
+  color: var(--ink-soft);
 }
 
 .cost {
   display: grid;
   justify-items: end;
   align-content: start;
-  color: var(--muted);
-  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -73,9 +73,9 @@
 }
 
 li[data-state='done'] .status {
-  color: var(--accent);
+  color: var(--sea);
 }
 
 li[data-state='part'] .status {
-  color: var(--brass);
+  color: var(--ink);
 }

@@ -12,7 +12,7 @@
   margin-bottom: -1px;
   padding-block: var(--space-3);
   border-bottom: 2px solid transparent;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-weight: 500;
   text-decoration: none;
 }
@@ -22,7 +22,7 @@
 }
 
 .link[aria-current='page'] {
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--sea);
   color: var(--ink);
 }
 

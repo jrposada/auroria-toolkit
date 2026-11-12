@@ -3,7 +3,7 @@
   display: grid;
   gap: var(--space-3);
   padding-top: var(--space-4);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--rule);
 }
 
 .list {
@@ -16,6 +16,6 @@
 
 .measured {
   max-width: 72ch;
-  color: var(--muted);
+  color: var(--ink-soft);
   font-size: var(--text-sm);
 }

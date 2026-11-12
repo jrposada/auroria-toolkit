@@ -1,8 +1,8 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
 import LineChart from '../../ui/line-chart/line-chart';
+import Section from '../../ui/section/section';
 import { totalsSeries } from './plan-view';
 import { LEVEL_SHORTCUTS } from './planner-form';
 import { Plan } from './use-plan';
@@ -17,9 +17,9 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
   const maxLevel = plan.cls.maxLevel;
 
   return (
-    <Card
+    <Section
       title={t('stat_planner.totals.title', { maxLevel })}
-      aside={t('stat_planner.totals.marker')}
+      actions={t('stat_planner.totals.marker')}
     >
       <LineChart
         ariaLabel={t('stat_planner.totals.aria', { maxLevel })}
@@ -27,19 +27,21 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
           {
             id: 'str',
             label: t('stat_planner.stats.short.str'),
-            color: 'var(--accent)',
+            color: 'var(--sea)',
             values: totals.str,
           },
           {
             id: 'con',
             label: t('stat_planner.stats.short.con'),
-            color: 'var(--con)',
+            color: 'var(--ink)',
+            dash: '6 4',
             values: totals.con,
           },
           {
             id: 'tal',
             label: t('stat_planner.stats.short.tal'),
-            color: 'var(--brass)',
+            color: 'var(--luna)',
+            dash: '2 4',
             values: totals.tal,
           },
         ]}
@@ -56,7 +58,7 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
           })
         }
       />
-    </Card>
+    </Section>
   );
 };
 

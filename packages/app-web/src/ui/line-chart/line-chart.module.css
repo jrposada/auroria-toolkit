@@ -11,20 +11,24 @@
 }
 
 .grid {
-  stroke: var(--line);
+  stroke: var(--rule);
   stroke-width: 1;
 }
 
 .tick {
-  fill: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  fill: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Chart labels are lettered in italic serif, the way charts letter water. */
 .axisLabel {
-  fill: var(--muted);
-  font-family: var(--font-body);
-  font-size: 11px;
+  fill: var(--ink-soft);
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .line {
@@ -34,9 +38,9 @@
 }
 
 .endLabel {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .marker {
@@ -45,6 +49,6 @@
 }
 
 .dot {
-  stroke: var(--surface);
+  stroke: var(--paper);
   stroke-width: 1.5;
 }
