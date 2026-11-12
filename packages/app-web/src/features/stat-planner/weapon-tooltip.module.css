@@ -1,0 +1,122 @@
+/* Sits inside the dark item-card skin (tooltip panel or inline detail). */
+.card {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--tip-ink);
+  font-size: var(--text-sm);
+}
+
+.name {
+  margin: 0;
+  color: var(--rc);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+  line-height: 1.2;
+}
+
+.kind {
+  color: var(--tip-muted);
+  font-size: var(--text-xs);
+}
+
+.section {
+  display: grid;
+  gap: 3px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--tip-line);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.key {
+  color: var(--tip-muted);
+}
+
+.value,
+.share {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-align: right;
+}
+
+.value[data-met='true'] {
+  color: var(--tip-good);
+}
+
+.value[data-met='false'] {
+  color: var(--tip-bad);
+}
+
+.value[data-tone='luna'] {
+  color: var(--tip-luna);
+}
+
+.share {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.share [data-share='physical'] {
+  color: var(--rc);
+}
+
+.share [data-share='magic'] {
+  color: var(--tip-magic);
+}
+
+.bar {
+  display: flex;
+  height: 6px;
+  margin-block: 2px 4px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--tip-line);
+}
+
+.bar [data-share='physical'] {
+  background: var(--rc);
+}
+
+.bar [data-share='magic'] {
+  background: var(--tip-magic);
+}
+
+.tempering {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.tempering th,
+.tempering td {
+  padding: 2px 0 2px var(--space-2);
+  text-align: right;
+}
+
+.tempering th {
+  color: var(--tip-muted);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.tempering th[scope='row'] {
+  padding-left: 0;
+  text-align: left;
+}
+
+.note {
+  color: var(--tip-muted);
+  font-size: 11px;
+}
+
+.warning {
+  color: var(--tip-note);
+}
