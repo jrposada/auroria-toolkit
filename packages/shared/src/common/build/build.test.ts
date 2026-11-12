@@ -5,6 +5,7 @@ import {
   Build,
   BUILD_STORAGE_KEY,
   buildSchema,
+  compareCandidate,
   computeBuild,
   decodeBuild,
   encodeBuild,
@@ -275,5 +276,63 @@ describe('computeBuild', () => {
 
   it("throws when the class isn't the build's", () => {
     expect(() => computeBuild(newBuild(MAGE), WARRIOR, CATALOG)).toThrow();
+  });
+});
+
+describe('compareCandidate', () => {
+  const base = warrior({ level: 20, gear: { main: ls, swap: gs } });
+  const compare = (over: Partial<Build>) =>
+    compareCandidate({ ...base, ...over }, WARRIOR, CATALOG);
+  const zeros = { str: 0, agi: 0, con: 0, int: 0, tal: 0, end: 0 };
+
+  it('returns null without a candidate', () => {
+    expect(compare({})).toBeNull();
+  });
+
+  it("returns null for a candidate that doesn't resolve", () => {
+    expect(
+      compare({ candidate: { slot: 'helmet', piece: piece('gone') } })
+    ).toBeNull();
+    expect(
+      compare({ candidate: { slot: 'main', piece: piece('staff') } })
+    ).toBeNull();
+  });
+
+  it('adds a non-weapon piece through the gear ATK delta', () => {
+    const current = computeBuild(base, WARRIOR, CATALOG).dps.at(20);
+    const delta = compare({ candidate: { slot: 'helmet', piece: HELM } })!;
+
+    expect(delta.slot).toBe('helmet');
+    expect(delta.attributes).toEqual({ ...zeros, con: 1 });
+    expect(delta.derived.attack).toBeCloseTo(4, 10);
+    expect(delta.dps.mainAtk).toBeCloseTo(4, 10);
+    expect(delta.dps.swapAtk).toBeCloseTo(4, 10);
+    expect(delta.dps.main).toBeCloseTo(
+      (current.main * 4) / current.mainAtk,
+      10
+    );
+  });
+
+  it('replaces the main weapon through weaponAtk, not the delta', () => {
+    const delta = compare({
+      candidate: { slot: 'main', piece: { ...SWORD, enhancement: 5 } },
+    })!;
+
+    // 60 − 41 weapon ATK, plus 1.3 per point of the sword's +3 STR
+    expect(delta.attributes).toEqual({ ...zeros, str: 3 });
+    expect(delta.dps.mainAtk).toBeCloseTo(19 + 1.3 * 3, 10);
+    expect(delta.dps.swapAtk).toBeCloseTo(0, 10);
+    expect(delta.derived.attack).toBeCloseTo(19 + 1.3 * 3, 10);
+  });
+
+  it('diffs against the piece already in the slot', () => {
+    const delta = compare({
+      gear: { ...base.gear, helmet: HELM },
+      candidate: { slot: 'helmet', piece: { ...HELM, lunagemId: 'ruby' } },
+    })!;
+
+    expect(delta.attributes).toEqual(zeros);
+    expect(delta.derived.attack).toBeCloseTo(5, 10);
+    expect(delta.dps.mainAtk).toBeCloseTo(5, 10);
   });
 });

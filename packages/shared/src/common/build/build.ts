@@ -11,11 +11,13 @@ import { DerivedStats, derivedStats } from './derive.ts';
 import { DpsAtLevel, dpsModel, DpsTest } from './dps.ts';
 import {
   equippedItems,
+  fitsSlot,
   GearBonuses,
   gearBonuses,
   GearCatalog,
   gearPieceSchema,
   GearSet,
+  GearSlot,
   gearSlotSchema,
   pieceAtk,
 } from './gear.ts';
@@ -259,4 +261,49 @@ export function computeBuild(
   catalog: GearCatalog
 ): BuildSnapshot {
   return snapshot(build, cls, catalog, build.gear);
+}
+
+export type CandidateDelta = {
+  slot: GearSlot;
+  attributes: AttributeBlock;
+  derived: DerivedStats;
+  dps: DpsAtLevel;
+};
+
+const minus = <T extends Record<string, number>>(a: T, b: T): T =>
+  Object.fromEntries(
+    Object.keys(a).map((key) => [key, a[key]! - b[key]!])
+  ) as T;
+
+/** Candidate equipped minus the current build, at the build's level. */
+export function compareCandidate(
+  build: Build,
+  cls: Class,
+  catalog: GearCatalog
+): CandidateDelta | null {
+  if (!build.candidate) {
+    return null;
+  }
+
+  const { slot, piece } = build.candidate;
+  const item = catalog.items.find(({ id }) => id === piece.itemId);
+  if (!item || !fitsSlot(item, slot, build.classId)) {
+    return null;
+  }
+
+  const current = snapshot(build, cls, catalog, build.gear);
+  // The DPS test stays the one read with the current gear.
+  const next = snapshot(
+    { ...build, gear: { ...build.gear, [slot]: piece }, candidate: null },
+    cls,
+    catalog,
+    build.gear
+  );
+
+  return {
+    slot,
+    attributes: minus(next.attributes, current.attributes),
+    derived: minus(next.derived, current.derived),
+    dps: minus(next.dps.at(current.level), current.dps.at(current.level)),
+  };
 }
