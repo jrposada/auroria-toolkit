@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
+import Section from '../../ui/section/section';
 import { pointsSpent, statRows } from './plan-view';
 import styles from './stats-card.module.css';
 import { Plan } from './use-plan';
@@ -15,9 +15,9 @@ const StatsCard: FunctionComponent<StatsCardProps> = ({ plan }) => {
   const points = pointsSpent(plan);
 
   return (
-    <Card
+    <Section
       title={t('stat_planner.stats_card.title', { level: plan.level })}
-      aside={t('stat_planner.stats_card.points', points)}
+      actions={t('stat_planner.stats_card.points', points)}
     >
       <div className={styles.scroll}>
         <table className={styles.table}>
@@ -47,7 +47,7 @@ const StatsCard: FunctionComponent<StatsCardProps> = ({ plan }) => {
           </tbody>
         </table>
       </div>
-    </Card>
+    </Section>
   );
 };
 

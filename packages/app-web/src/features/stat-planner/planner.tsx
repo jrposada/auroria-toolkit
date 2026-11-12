@@ -11,10 +11,10 @@ import {
   writeStoredValue,
 } from '../../core/hooks/use-local-storage/use-local-storage';
 import { useMediaQuery } from '../../core/hooks/use-media-query/use-media-query';
-import Card from '../../ui/card/card';
 import DataState from '../../ui/data-state/data-state';
 import Placeholder from '../../ui/data-state/placeholder';
 import { combineQueryStatus } from '../../ui/data-state/query-status';
+import Section from '../../ui/section/section';
 import DpsSection from './dps-section';
 import InGameChecks from './in-game-checks';
 import LevelBar from './level-bar';
@@ -84,7 +84,7 @@ const PlannerContent: FunctionComponent = () => {
       >
         {plan && (
           <>
-            <Card>
+            <Section>
               <div className={styles.weapons}>
                 <WeaponPicker slot="ls" plan={plan} />
                 <WeaponPicker slot="gs" plan={plan} />
@@ -98,7 +98,7 @@ const PlannerContent: FunctionComponent = () => {
                 </p>
                 <p>{t('stat_planner.weapons.note')}</p>
               </div>
-            </Card>
+            </Section>
             <div className={styles.summary}>
               <StatsCard plan={plan} />
               <NextLevelCard plan={plan} />

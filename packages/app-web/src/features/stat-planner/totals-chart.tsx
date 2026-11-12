@@ -1,8 +1,8 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
 import LineChart from '../../ui/line-chart/line-chart';
+import Section from '../../ui/section/section';
 import { totalsSeries } from './plan-view';
 import { LEVEL_SHORTCUTS } from './planner-form';
 import { Plan } from './use-plan';
@@ -17,9 +17,9 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
   const maxLevel = plan.cls.maxLevel;
 
   return (
-    <Card
+    <Section
       title={t('stat_planner.totals.title', { maxLevel })}
-      aside={t('stat_planner.totals.marker')}
+      actions={t('stat_planner.totals.marker')}
     >
       <LineChart
         ariaLabel={t('stat_planner.totals.aria', { maxLevel })}
@@ -58,7 +58,7 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
           })
         }
       />
-    </Card>
+    </Section>
   );
 };
 

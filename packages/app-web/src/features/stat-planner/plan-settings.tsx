@@ -4,8 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import Button from '../../ui/button/button';
-import Card from '../../ui/card/card';
 import Field from '../../ui/field/field';
+import Section from '../../ui/section/section';
 import styles from './plan-settings.module.css';
 import { DEFAULTS, PlannerForm, RATIO_OPTIONS } from './planner-form';
 
@@ -22,7 +22,7 @@ const PlanSettings: FunctionComponent<PlanSettingsProps> = ({ cls }) => {
   } = useFormContext<PlannerForm>();
 
   return (
-    <Card>
+    <Section>
       <details>
         <summary className={styles.summary}>
           {t('stat_planner.settings.title')}
@@ -62,7 +62,7 @@ const PlanSettings: FunctionComponent<PlanSettingsProps> = ({ cls }) => {
           </div>
         </div>
       </details>
-    </Card>
+    </Section>
   );
 };
 

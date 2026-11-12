@@ -1,8 +1,8 @@
 import { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Card from '../../ui/card/card';
 import Chip from '../../ui/chip/chip';
+import Section from '../../ui/section/section';
 import styles from './next-level-card.module.css';
 import { calibrationValues, derivedView, nextLevel } from './plan-view';
 import { Plan } from './use-plan';
@@ -29,7 +29,7 @@ const NextLevelCard: FunctionComponent<NextLevelCardProps> = ({ plan }) => {
   ] as const;
 
   return (
-    <Card
+    <Section
       title={
         next.kind === 'max'
           ? t('stat_planner.next.title_max', { level: next.level })
@@ -72,7 +72,7 @@ const NextLevelCard: FunctionComponent<NextLevelCardProps> = ({ plan }) => {
           {t('stat_planner.next.calibration', calibrationValues())}
         </p>
       </div>
-    </Card>
+    </Section>
   );
 };
 
