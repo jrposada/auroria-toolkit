@@ -20,3 +20,7 @@
 .hint {
   font-size: var(--text-xs);
 }
+
+.field [aria-invalid='true'] {
+  border-color: var(--warn);
+}
