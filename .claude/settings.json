@@ -1,5 +1,28 @@
 {
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-app-web lint:eslint)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-app-web lint:format)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-app-web lint:types)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-app-web lint)",
+
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-backend lint:eslint)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-backend lint:format)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-backend lint:types)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-backend lint)",
+
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared lint:eslint)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared lint:format)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared lint:types)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared lint)",
+
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared-react lint:eslint)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared-react lint:format)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared-react lint:types)",
+      "Bash(pnpm --filter @jrposada/auroria-toolkit-shared-react lint)"
+    ]
   }
 }
