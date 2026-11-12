@@ -8,6 +8,8 @@ export const classes = pgTable('classes', {
   pointsPerLevel: integer('points_per_level').notNull(),
   maxLevel: integer('max_level').notNull(),
   weaponTypes: text('weapon_types').array().notNull(),
+  allocation: jsonb('allocation').$type<Class['allocation']>().notNull(),
+  derivation: jsonb('derivation').$type<Class['derivation']>().notNull(),
 });
 
 export type ClassRow = typeof classes.$inferSelect;

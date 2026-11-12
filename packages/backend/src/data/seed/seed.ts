@@ -94,6 +94,8 @@ export function toClassRow(item: Class): ClassRow {
     pointsPerLevel: item.pointsPerLevel,
     maxLevel: item.maxLevel,
     weaponTypes: item.weaponTypes,
+    allocation: item.allocation,
+    derivation: item.derivation,
   };
 }
 
