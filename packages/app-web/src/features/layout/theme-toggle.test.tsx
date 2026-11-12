@@ -12,12 +12,22 @@ describe('Given <ThemeToggle/> with nothing stored', () => {
     </I18nextProvider>
   );
 
-  it('then it is a button showing the system choice', () => {
-    expect(html).toMatch(/<button[^>]*type="button"/);
-    expect(html).toContain('System');
+  it('then it is a radio group named Theme with System, Light and Dark', () => {
+    expect(html).toMatch(/role="radiogroup"[^>]*aria-label="Theme"/);
+    expect(html.match(/type="radio"/g)).toHaveLength(3);
+    expect(html).toContain('>System<');
+    expect(html).toContain('>Light<');
+    expect(html).toContain('>Dark<');
   });
 
-  it('then its label says what a click does', () => {
-    expect(html).toContain('aria-label="Theme: System. Switch to Light."');
+  it('then System is checked', () => {
+    const checked = html.match(/<input[^>]*checked[^>]*>/g);
+
+    expect(checked).toHaveLength(1);
+    expect(checked?.[0]).toContain('value="system"');
+  });
+
+  it('then there is no cycling button', () => {
+    expect(html).not.toContain('<button');
   });
 });
