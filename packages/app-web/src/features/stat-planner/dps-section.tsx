@@ -167,6 +167,7 @@ const DpsSection: FunctionComponent<DpsSectionProps> = ({ plan }) => {
                   id: 'gs',
                   label: t('stat_planner.weapons.gs'),
                   color: 'var(--ink)',
+                  dash: '6 4',
                   values: series.gs,
                 },
               ]}

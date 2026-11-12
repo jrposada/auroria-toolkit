@@ -2,12 +2,18 @@
   width: 40px;
   height: 40px;
   padding: 0;
-  font-size: 1.25rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  background: transparent;
+  font-size: var(--text-lg);
   line-height: 1;
 }
 
+.stepper:hover:not(:disabled) {
+  border-color: var(--sea);
+}
+
 .stepper:disabled {
-  border-color: var(--rule);
   opacity: 0.5;
   cursor: default;
 }

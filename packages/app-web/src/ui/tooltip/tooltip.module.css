@@ -7,9 +7,9 @@
   padding: 12px 14px;
   border: 1px solid var(--tip-line);
   border-top: 3px solid var(--tooltip-accent, var(--tip-line));
-  border-radius: 8px;
+  border-radius: var(--radius-float);
   background: var(--tip-bg);
-  box-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+  box-shadow: var(--lift);
   color: var(--tip-ink);
   font-size: var(--text-sm);
   pointer-events: none;

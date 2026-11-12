@@ -17,13 +17,18 @@
 
 .tick {
   fill: var(--ink-soft);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Chart labels are lettered in italic serif, the way charts letter water. */
 .axisLabel {
   fill: var(--ink-soft);
-  font-family: var(--font-sans);
-  font-size: 11px;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .line {
@@ -34,8 +39,8 @@
 
 .endLabel {
   font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .marker {
@@ -44,6 +49,6 @@
 }
 
 .dot {
-  stroke: var(--sheet);
+  stroke: var(--paper);
   stroke-width: 1.5;
 }

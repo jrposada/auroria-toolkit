@@ -33,13 +33,15 @@ const TotalsChart: FunctionComponent<TotalsChartProps> = ({ plan }) => {
           {
             id: 'con',
             label: t('stat_planner.stats.short.con'),
-            color: 'var(--ink-soft)',
+            color: 'var(--ink)',
+            dash: '6 4',
             values: totals.con,
           },
           {
             id: 'tal',
             label: t('stat_planner.stats.short.tal'),
-            color: 'var(--ink)',
+            color: 'var(--luna)',
+            dash: '2 4',
             values: totals.tal,
           },
         ]}
