@@ -69,7 +69,7 @@ const NextLevelCard: FunctionComponent<NextLevelCardProps> = ({ plan }) => {
           ))}
         </dl>
         <p className={styles.note}>
-          {t('stat_planner.next.calibration', calibrationValues())}
+          {t('stat_planner.next.calibration', calibrationValues(plan))}
         </p>
       </div>
     </Section>

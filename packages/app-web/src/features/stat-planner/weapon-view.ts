@@ -1,4 +1,4 @@
-import { talentReachedAt } from '@shared/common/stat-planner/project-plan';
+import { talentReachedAt } from '@shared/common/build/allocate';
 import { Rarity, TemperingStep, Weapon } from '@shared/models/weapons/weapon';
 
 import { Plan } from './use-plan';

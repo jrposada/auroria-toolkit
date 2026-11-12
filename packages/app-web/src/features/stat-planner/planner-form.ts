@@ -1,5 +1,4 @@
-import { DpsTest } from '@shared/common/stat-planner/dps-model';
-import { PlanRatio } from '@shared/common/stat-planner/project-plan';
+import { PlanRatio } from '@shared/common/build/allocate';
 import z from 'zod';
 
 export const PLANNER_STORAGE_KEY = 'auroria-stat-planner-v1';
@@ -63,13 +62,25 @@ export const DEFAULTS: PlannerForm = {
   testInputsEdited: false,
 };
 
+export type PlannerTest = {
+  lsAtk: number;
+  lsDmg: number;
+  lsSec: number;
+  gsAtk: number;
+  gsDmg: number;
+  gsSec: number;
+  /** Attack read with the tested Longsword equipped. */
+  attack: number;
+  str: number;
+};
+
 export type PlannerValues = {
   level: number;
   ratio: PlanRatio;
   talentStartLevel: number;
   lsId: string;
   gsId: string;
-  test: DpsTest;
+  test: PlannerTest;
   traitPoints: number;
   testInputsEdited: boolean;
 };
