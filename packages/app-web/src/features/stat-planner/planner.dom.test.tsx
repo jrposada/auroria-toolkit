@@ -1,11 +1,29 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { pageText, renderPlanner, tile } from './test/dom';
+import { DEFAULTS, PLANNER_STORAGE_KEY } from './planner-form';
+import { pageText, renderPlanner, shownLevel, slider, tile } from './test/dom';
 
 beforeEach(() => localStorage.clear());
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
+
+function stored(): Record<string, unknown> {
+  return JSON.parse(localStorage.getItem(PLANNER_STORAGE_KEY)!);
+}
+
+function field(label: string | RegExp): HTMLInputElement {
+  return screen.getByLabelText<HTMLInputElement>(label);
+}
+
+function testDamage(): HTMLInputElement {
+  return screen.getAllByLabelText<HTMLInputElement>(
+    'Test: total damage dealt'
+  )[0]!;
+}
 
 describe('Given <Planner/> in a DOM', () => {
   it('when game data is loaded then it renders from the mocked data', () => {
@@ -59,5 +77,111 @@ describe('Given <Planner/> in a DOM', () => {
     expect(text).toContain('total 5 Done');
     expect(text).toContain('total 9 2 to go');
     expect(text).toContain('total 12 Later');
+  });
+
+  it('when Reset to defaults is clicked then every setting returns to its default', () => {
+    renderPlanner();
+    fireEvent.change(slider(), { target: { value: '27' } });
+    fireEvent.change(field('Strength : Constitution per level'), {
+      target: { value: '3' },
+    });
+    fireEvent.change(field('Start adding Talent at level'), {
+      target: { value: '31' },
+    });
+    fireEvent.click(tile('twisted-fate-blade'));
+    fireEvent.click(tile('fallen-margrave'));
+    fireEvent.change(testDamage(), { target: { value: '1300' } });
+    fireEvent.change(field(/^Trait points earned/), {
+      target: { value: '7' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reset to defaults' }));
+
+    expect(shownLevel()).toBe(1);
+    expect(slider().value).toBe('1');
+    expect(field('Strength : Constitution per level').value).toBe('2');
+    expect(field('Start adding Talent at level').value).toBe('29');
+    expect(tile('wrathful-tyrants-horn').getAttribute('aria-checked')).toBe(
+      'true'
+    );
+    expect(tile('scattered-mist').getAttribute('aria-checked')).toBe('true');
+    expect(testDamage().value).toBe('1200');
+    expect(field(/^Trait points earned/).value).toBe('0');
+    expect(pageText()).toContain('Example numbers');
+    expect(stored()).toEqual(DEFAULTS);
+  });
+
+  describe('persistence', () => {
+    it('when a setting changes then it is written to auroria-stat-planner-v1', () => {
+      renderPlanner();
+
+      fireEvent.click(tile('twisted-fate-blade'));
+      expect(stored().lsId).toBe('twisted-fate-blade');
+
+      fireEvent.change(slider(), { target: { value: '12' } });
+      expect(stored().level).toBe(12);
+    });
+
+    it('when the page is rendered again then the stored settings come back', () => {
+      renderPlanner();
+      fireEvent.change(slider(), { target: { value: '27' } });
+      fireEvent.change(testDamage(), { target: { value: '1300' } });
+      cleanup();
+
+      renderPlanner();
+
+      expect(shownLevel()).toBe(27);
+      expect(testDamage().value).toBe('1300');
+      expect(pageText()).not.toContain('Example numbers');
+    });
+
+    it('a cleared input reloads as its default', () => {
+      renderPlanner();
+      fireEvent.change(field(/^Trait points earned/), {
+        target: { value: '' },
+      });
+      expect(stored().traitPoints).toBeNull();
+      cleanup();
+
+      renderPlanner();
+
+      expect(field(/^Trait points earned/).value).toBe('0');
+      expect(pageText()).not.toContain('NaN');
+    });
+
+    it('when storage holds junk then the defaults are used', () => {
+      localStorage.setItem(PLANNER_STORAGE_KEY, '{not json');
+      renderPlanner();
+
+      expect(shownLevel()).toBe(1);
+      expect(tile('wrathful-tyrants-horn').getAttribute('aria-checked')).toBe(
+        'true'
+      );
+      cleanup();
+
+      localStorage.setItem(
+        PLANNER_STORAGE_KEY,
+        JSON.stringify({ level: 'x', ratio: '9', traitPoints: 3 })
+      );
+      renderPlanner();
+
+      expect(shownLevel()).toBe(1);
+      expect(field('Strength : Constitution per level').value).toBe('2');
+      expect(field(/^Trait points earned/).value).toBe('3');
+    });
+
+    it('when localStorage throws then the planner still renders and responds', () => {
+      const denied = () => {
+        throw new Error('denied');
+      };
+      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(denied);
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(denied);
+
+      expect(() => renderPlanner()).not.toThrow();
+      expect(shownLevel()).toBe(1);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Level up' }));
+      expect(shownLevel()).toBe(2);
+    });
   });
 });
