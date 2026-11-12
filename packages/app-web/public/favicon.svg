@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .tile { fill: #23735f; }
+    .lit { fill: #f3f4f2; }
+    .shade { fill: #cfded8; }
+    .guard { fill: #e0a548; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #1b2220; }
+      .lit { fill: #7fd4b9; }
+      .shade { fill: #5cc0a2; }
+    }
+  </style>
+  <rect class="tile" x="1" y="1" width="30" height="30" rx="7"/>
+  <path class="lit" d="M16 3 V12.5 L10 28 H5 Z"/>
+  <path class="shade" d="M16 3 L27 28 H22 L16 12.5 Z"/>
+  <path class="guard" d="M4 20 L7 18 H25 L28 20 L25 22 H7 Z"/>
+</svg>
